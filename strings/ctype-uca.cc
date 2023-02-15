@@ -9596,41 +9596,6 @@ CHARSET_INFO my_charset_utf8mb4_0900_ai_ci = {
     &my_collation_uca_900_handler,
     NO_PAD};
 
-CHARSET_INFO my_charset_utf8mb4_lars_0900_ai_ci = {
-    324,
-    0,
-    0,                                       /* number       */
-    MY_CS_UTF8MB4_UCA_FLAGS | MY_CS_PRIMARY, /* state    */
-    MY_UTF8MB4,                              /* csname       */
-    MY_UTF8MB4 "lars_0900_ai_ci",            /* m_coll_name  */
-    "Custom comment here",                   /* comment      */
-    nullptr,                                 /* tailoring    */
-    nullptr,                                 /* coll_param   */
-    ctype_utf8,                              /* ctype        */
-    nullptr,                                 /* to_lower     */
-    nullptr,                                 /* to_upper     */
-    nullptr,                                 /* sort_order   */
-    &my_uca_v900,                            /* uca_900      */
-    nullptr,                                 /* tab_to_uni   */
-    nullptr,                                 /* tab_from_uni */
-    &my_unicase_unicode900,                  /* caseinfo     */
-    nullptr,                                 /* state_map    */
-    nullptr,                                 /* ident_map    */
-    0,                                       /* strxfrm_multiply */
-    1,                                       /* caseup_multiply  */
-    1,                                       /* casedn_multiply  */
-    1,                                       /* mbminlen      */
-    4,                                       /* mbmaxlen      */
-    1,                                       /* mbmaxlenlen   */
-    9,                                       /* min_sort_char */
-    0x10FFFF,                                /* max_sort_char */
-    ' ',                                     /* pad char      */
-    false, /* escape_with_backslash_is_dangerous */
-    1,     /* levels_for_compare */
-    &my_charset_utf8mb4_handler,
-    &my_collation_uca_900_handler,
-    NO_PAD};
-
 CHARSET_INFO my_charset_utf8mb4_de_pb_0900_ai_ci = {
     256,
     0,
@@ -11989,6 +11954,41 @@ CHARSET_INFO my_charset_utf8mb4_mn_cyrl_0900_as_cs = {
     ' ',                                    /* pad char      */
     false, /* escape_with_backslash_is_dangerous */
     3,     /* levels_for_compare */
+    &my_charset_utf8mb4_handler,
+    &my_collation_uca_900_handler,
+    NO_PAD};
+
+CHARSET_INFO my_charset_utf8mb4_lars_0900_ai_ci = {
+    324,
+    0,
+    0,                                       /* number       */
+    MY_CS_UTF8MB4_UCA_FLAGS | MY_CS_PRIMARY, /* state    */
+    MY_UTF8MB4,                              /* csname       */
+    MY_UTF8MB4 "_lars_0900_ai_ci",           /* m_coll_name  */
+    "Custom comment here",                   /* comment      */
+    nullptr,                                 /* tailoring    */
+    nullptr,                                 /* coll_param   */
+    ctype_utf8,                              /* ctype        */
+    nullptr,                                 /* to_lower     */
+    nullptr,                                 /* to_upper     */
+    nullptr,                                 /* sort_order   */
+    &my_uca_v900,                            /* uca_900      */
+    nullptr,                                 /* tab_to_uni   */
+    nullptr,                                 /* tab_from_uni */
+    &my_unicase_unicode900,                  /* caseinfo     */
+    nullptr,                                 /* state_map    */
+    nullptr,                                 /* ident_map    */
+    0,                                       /* strxfrm_multiply */
+    1,                                       /* caseup_multiply  */
+    1,                                       /* casedn_multiply  */
+    1,                                       /* mbminlen      */
+    4,                                       /* mbmaxlen      */
+    1,                                       /* mbmaxlenlen   */
+    9,                                       /* min_sort_char */
+    0x10FFFF,                                /* max_sort_char */
+    ' ',                                     /* pad char      */
+    false, /* escape_with_backslash_is_dangerous */
+    1,     /* levels_for_compare */
     &my_charset_utf8mb4_handler,
     &my_collation_uca_900_handler,
     NO_PAD};
