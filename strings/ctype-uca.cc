@@ -6052,6 +6052,13 @@ MY_COLLATION_HANDLER my_collation_uca_900_handler = {
     my_wildcmp_uca,       my_strcasecmp_uca,      my_instr_mb,
     my_hash_sort_uca_900, my_propagate_uca_900};
 
+MY_COLLATION_HANDLER my_collation_handler_lars = {
+    my_coll_init_uca, /* init */
+    my_coll_uninit_uca,   my_strnncoll_uca_900,   my_strnncollsp_uca_900,
+    my_strnxfrm_uca_900,  my_strnxfrmlen_uca_900, my_like_range_mb,
+    my_wildcmp_uca,       my_strcasecmp_uca,      my_instr_mb,
+    my_hash_sort_uca_900, my_propagate_uca_900};
+
 /*
   We consider bytes with code more than 127 as a letter.
   This guarantees that word boundaries work fine with regular
@@ -6923,6 +6930,7 @@ CHARSET_INFO my_charset_utf8mb3_vietnamese_ci = {
     PAD_SPACE};
 
 extern MY_CHARSET_HANDLER my_charset_utf8mb4_handler;
+extern MY_CHARSET_HANDLER my_charset_utf8mb4_handler_lars;
 
 #define MY_CS_UTF8MB4_UCA_FLAGS \
   (MY_CS_COMPILED | MY_CS_STRNXFRM | MY_CS_UNICODE | MY_CS_UNICODE_SUPPLEMENT)
@@ -11989,6 +11997,6 @@ CHARSET_INFO my_charset_utf8mb4_lars_0900 = {
     ' ',                     /* pad char      */
     false,                   /* escape_with_backslash_is_dangerous */
     1,                       /* levels_for_compare */
-    &my_charset_utf8mb4_handler,
-    &my_collation_uca_900_handler,
+    &my_charset_utf8mb4_handler_lars,
+    &my_collation_handler_lars,
     NO_PAD};

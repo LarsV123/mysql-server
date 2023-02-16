@@ -7758,6 +7758,35 @@ MY_CHARSET_HANDLER my_charset_utf8mb4_handler = {nullptr, /* init */
                                                  my_strntoull10rnd_8bit,
                                                  my_scan_8bit};
 
+MY_CHARSET_HANDLER my_charset_utf8mb4_handler_lars = {
+    nullptr, /* init */
+    my_ismbchar_utf8mb4,
+    my_mbcharlen_utf8mb4,
+    my_numchars_mb,
+    my_charpos_mb4,
+    my_well_formed_len_utf8mb4,
+    my_lengthsp_8bit,
+    my_numcells_mb,
+    my_mb_wc_utf8mb4_thunk,
+    my_wc_mb_utf8mb4,
+    my_mb_ctype_mb,
+    my_caseup_str_utf8mb4,
+    my_casedn_str_utf8mb4,
+    my_caseup_utf8mb4,
+    my_casedn_utf8mb4,
+    my_snprintf_8bit,
+    my_long10_to_str_8bit,
+    my_longlong10_to_str_8bit,
+    my_fill_8bit,
+    my_strntol_8bit,
+    my_strntoul_8bit,
+    my_strntoll_8bit,
+    my_strntoull_8bit,
+    my_strntod_8bit,
+    my_strtoll10_8bit,
+    my_strntoull10rnd_8bit,
+    my_scan_8bit};
+
 CHARSET_INFO my_charset_utf8mb4_general_ci = {
     45,
     0,
