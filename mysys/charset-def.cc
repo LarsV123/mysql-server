@@ -230,7 +230,7 @@ extern CHARSET_INFO my_charset_utf8mb4_bs_0900_ai_ci;
 extern CHARSET_INFO my_charset_utf8mb4_bg_0900_ai_ci;
 extern CHARSET_INFO my_charset_utf8mb4_gl_0900_ai_ci;
 extern CHARSET_INFO my_charset_utf8mb4_mn_cyrl_0900_ai_ci;
-extern CHARSET_INFO my_charset_utf8mb4_lars_0900_ai_ci;
+extern CHARSET_INFO my_charset_utf8mb4_lars_0900;
 extern CHARSET_INFO my_charset_utf8mb4_0900_as_cs;
 extern CHARSET_INFO my_charset_utf8mb4_de_pb_0900_as_cs;
 extern CHARSET_INFO my_charset_utf8mb4_is_0900_as_cs;
@@ -264,7 +264,6 @@ extern CHARSET_INFO my_charset_utf8mb4_bs_0900_as_cs;
 extern CHARSET_INFO my_charset_utf8mb4_bg_0900_as_cs;
 extern CHARSET_INFO my_charset_utf8mb4_gl_0900_as_cs;
 extern CHARSET_INFO my_charset_utf8mb4_mn_cyrl_0900_as_cs;
-extern CHARSET_INFO my_charset_utf8mb4_lars_0900_as_cs;
 extern CHARSET_INFO my_charset_utf8mb4_0900_bin;
 
 extern CHARSET_INFO my_charset_gb18030_unicode_520_ci;
@@ -439,7 +438,7 @@ bool init_compiled_charsets(myf flags [[maybe_unused]]) {
   add_compiled_collation(&my_charset_utf8mb4_bg_0900_ai_ci);
   add_compiled_collation(&my_charset_utf8mb4_gl_0900_ai_ci);
   add_compiled_collation(&my_charset_utf8mb4_mn_cyrl_0900_ai_ci);
-  add_compiled_collation(&my_charset_utf8mb4_lars_0900_ai_ci);
+  add_compiled_collation(&my_charset_utf8mb4_lars_0900);
   add_compiled_collation(&my_charset_utf8mb4_0900_as_cs);
   add_compiled_collation(&my_charset_utf8mb4_de_pb_0900_as_cs);
   add_compiled_collation(&my_charset_utf8mb4_is_0900_as_cs);
@@ -473,7 +472,6 @@ bool init_compiled_charsets(myf flags [[maybe_unused]]) {
   add_compiled_collation(&my_charset_utf8mb4_bg_0900_as_cs);
   add_compiled_collation(&my_charset_utf8mb4_gl_0900_as_cs);
   add_compiled_collation(&my_charset_utf8mb4_mn_cyrl_0900_as_cs);
-  add_compiled_collation(&my_charset_utf8mb4_lars_0900_as_cs);
   add_compiled_collation(&my_charset_utf16_general_ci);
   add_compiled_collation(&my_charset_utf16_bin);
   add_compiled_collation(&my_charset_utf16le_general_ci);
