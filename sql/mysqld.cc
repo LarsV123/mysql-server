@@ -6482,8 +6482,6 @@ static int init_server_components() {
   if (opt_initialize) {
     if (!is_help_or_validate_option()) {
       if (dd::init(dd::enum_dd_init_type::DD_INITIALIZE)) {
-        std::cout << "ERROR: Throwing error from bootstrapper.cc @ line 6484"
-                  << std::endl;
         LogErr(ERROR_LEVEL, ER_DD_INIT_FAILED);
         unireg_abort(1);
       }
@@ -6502,8 +6500,6 @@ static int init_server_components() {
     */
     if (!is_help_or_validate_option() &&
         dd::init(dd::enum_dd_init_type::DD_RESTART_OR_UPGRADE)) {
-      std::cout << "ERROR: Throwing error from bootstrapper.cc @ line 6503"
-                << std::endl;
       LogErr(ERROR_LEVEL, ER_DD_INIT_FAILED);
 
       /* If clone recovery fails, we rollback the files to previous
