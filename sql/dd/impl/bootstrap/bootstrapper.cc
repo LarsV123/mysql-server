@@ -111,6 +111,7 @@ bool update_system_tables(THD *thd) {
   if (dd::tables::DD_properties::instance().get(
           thd, "SYSTEM_TABLES", &system_tables_props, &exists) ||
       !exists) {
+    std::cout << "ERROR: Throwing error from update_system_tables" << std::endl;
     my_error(ER_DD_INIT_FAILED, MYF(0));
     return true;
   }
