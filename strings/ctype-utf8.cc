@@ -7758,6 +7758,20 @@ MY_CHARSET_HANDLER my_charset_utf8mb4_handler = {nullptr, /* init */
                                                  my_strntoull10rnd_8bit,
                                                  my_scan_8bit};
 
+// Wrapper for caseup (TO_UPPER)
+static size_t my_caseup_utf8mb4_lars(const CHARSET_INFO *cs, char *src,
+                                     size_t srclen, char *dst, size_t dstlen) {
+  printf("my_caseup_utf8mb4_lars\n");
+  return my_casedn_utf8mb4(cs, src, srclen, dst, dstlen);
+}
+
+// Wrapper for casedn (TO_LOWER)
+static size_t my_casedn_utf8mb4_lars(const CHARSET_INFO *cs, char *src,
+                                     size_t srclen, char *dst, size_t dstlen) {
+  printf("my_casedn_utf8mb4_lars\n");
+  return my_caseup_utf8mb4(cs, src, srclen, dst, dstlen);
+}
+
 MY_CHARSET_HANDLER my_charset_utf8mb4_handler_lars = {
     nullptr, /* init */
     my_ismbchar_utf8mb4,
@@ -7772,8 +7786,8 @@ MY_CHARSET_HANDLER my_charset_utf8mb4_handler_lars = {
     my_mb_ctype_mb,
     my_caseup_str_utf8mb4,
     my_casedn_str_utf8mb4,
-    my_caseup_utf8mb4,
-    my_casedn_utf8mb4,
+    my_caseup_utf8mb4_lars,
+    my_casedn_utf8mb4_lars,
     my_snprintf_8bit,
     my_long10_to_str_8bit,
     my_longlong10_to_str_8bit,
