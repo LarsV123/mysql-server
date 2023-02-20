@@ -7758,48 +7758,63 @@ MY_CHARSET_HANDLER my_charset_utf8mb4_handler = {nullptr, /* init */
                                                  my_strntoull10rnd_8bit,
                                                  my_scan_8bit};
 
-// Wrapper for caseup (TO_UPPER)
-static size_t my_caseup_utf8mb4_lars(const CHARSET_INFO *cs, char *src,
-                                     size_t srclen, char *dst, size_t dstlen) {
-  printf("my_caseup_utf8mb4_lars\n");
-  return my_casedn_utf8mb4(cs, src, srclen, dst, dstlen);
+static size_t wrapper_my_caseup_str_utf8mb4(const CHARSET_INFO *cs, char *src) {
+  // TODO: Replace with ICU equivalent
+  printf("wrapper_my_caseup_str_utf8mb4 called\n");
+  return my_caseup_str_utf8mb4(cs, src);
 }
 
-// Wrapper for casedn (TO_LOWER)
-static size_t my_casedn_utf8mb4_lars(const CHARSET_INFO *cs, char *src,
-                                     size_t srclen, char *dst, size_t dstlen) {
-  printf("my_casedn_utf8mb4_lars\n");
+static size_t wrapper_my_casedn_str_utf8mb4(const CHARSET_INFO *cs, char *src) {
+  // TODO: Replace with ICU equivalent
+  printf("wrapper_my_casedn_str_utf8mb4 called\n");
+  return my_caseup_str_utf8mb4(cs, src);
+}
+
+static size_t wrapper_my_caseup_utf8mb4(const CHARSET_INFO *cs, char *src,
+                                        size_t srclen, char *dst,
+                                        size_t dstlen) {
+  // TODO: Replace with ICU equivalent
+  printf("wrapper_my_caseup_utf8mb4 called\n");
   return my_caseup_utf8mb4(cs, src, srclen, dst, dstlen);
 }
 
-MY_CHARSET_HANDLER my_charset_utf8mb4_handler_lars = {
-    nullptr, /* init */
-    my_ismbchar_utf8mb4,
-    my_mbcharlen_utf8mb4,
-    my_numchars_mb,
-    my_charpos_mb4,
-    my_well_formed_len_utf8mb4,
-    my_lengthsp_8bit,
-    my_numcells_mb,
-    my_mb_wc_utf8mb4_thunk,
-    my_wc_mb_utf8mb4,
-    my_mb_ctype_mb,
-    my_caseup_str_utf8mb4,
-    my_casedn_str_utf8mb4,
-    my_caseup_utf8mb4_lars,
-    my_casedn_utf8mb4_lars,
-    my_snprintf_8bit,
-    my_long10_to_str_8bit,
-    my_longlong10_to_str_8bit,
-    my_fill_8bit,
-    my_strntol_8bit,
-    my_strntoul_8bit,
-    my_strntoll_8bit,
-    my_strntoull_8bit,
-    my_strntod_8bit,
-    my_strtoll10_8bit,
-    my_strntoull10rnd_8bit,
-    my_scan_8bit};
+static size_t wrapper_my_casedn_utf8mb4(const CHARSET_INFO *cs, char *src,
+                                        size_t srclen, char *dst,
+                                        size_t dstlen) {
+  // TODO: Replace with ICU equivalent
+  printf("wrapper_my_casedn_utf8mb4 called\n");
+  return my_casedn_utf8mb4(cs, src, srclen, dst, dstlen);
+}
+
+MY_CHARSET_HANDLER my_charset_icu_handler = {
+    nullptr,                     /* init */
+    my_ismbchar_utf8mb4,         // Replace with wrapper
+    my_mbcharlen_utf8mb4,        // Replace with wrapper
+    my_numchars_mb,              // Replace with wrapper
+    my_charpos_mb4,              // Replace with wrapper
+    my_well_formed_len_utf8mb4,  // Replace with wrapper
+    my_lengthsp_8bit,            // Replace with wrapper
+    my_numcells_mb,              // Replace with wrapper
+    my_mb_wc_utf8mb4_thunk,      // Replace with wrapper
+    my_wc_mb_utf8mb4,            // Replace with wrapper
+    my_mb_ctype_mb,              // Replace with wrapper
+    wrapper_my_caseup_str_utf8mb4,
+    wrapper_my_casedn_str_utf8mb4,
+    wrapper_my_caseup_utf8mb4,
+    wrapper_my_casedn_utf8mb4,
+    my_snprintf_8bit,           // Replace with wrapper
+    my_long10_to_str_8bit,      // Replace with wrapper
+    my_longlong10_to_str_8bit,  // Replace with wrapper
+    my_fill_8bit,               // Replace with wrapper
+    my_strntol_8bit,            // Replace with wrapper
+    my_strntoul_8bit,           // Replace with wrapper
+    my_strntoll_8bit,           // Replace with wrapper
+    my_strntoull_8bit,          // Replace with wrapper
+    my_strntod_8bit,            // Replace with wrapper
+    my_strtoll10_8bit,          // Replace with wrapper
+    my_strntoull10rnd_8bit,     // Replace with wrapper
+    my_scan_8bit                // Replace with wrapper
+};
 
 CHARSET_INFO my_charset_utf8mb4_general_ci = {
     45,

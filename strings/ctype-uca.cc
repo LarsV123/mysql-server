@@ -6052,12 +6052,102 @@ MY_COLLATION_HANDLER my_collation_uca_900_handler = {
     my_wildcmp_uca,       my_strcasecmp_uca,      my_instr_mb,
     my_hash_sort_uca_900, my_propagate_uca_900};
 
-MY_COLLATION_HANDLER my_collation_handler_lars = {
-    my_coll_init_uca, /* init */
-    my_coll_uninit_uca,   my_strnncoll_uca_900,   my_strnncollsp_uca_900,
-    my_strnxfrm_uca_900,  my_strnxfrmlen_uca_900, my_like_range_mb,
-    my_wildcmp_uca,       my_strcasecmp_uca,      my_instr_mb,
-    my_hash_sort_uca_900, my_propagate_uca_900};
+static int wrapper_strnncoll(const CHARSET_INFO *cs, const uchar *s,
+                             size_t slen, const uchar *t, size_t tlen,
+                             bool t_is_prefix) {
+  // TODO: Replace with ICU equivalent
+  printf("MY_COLLATION_HANDLER wrapper_strnncoll called\n");
+  return my_strnncoll_uca_900(cs, s, slen, t, tlen, t_is_prefix);
+}
+
+static int wrapper_strnncollsp(const CHARSET_INFO *cs, const uchar *s,
+                               size_t slen, const uchar *t, size_t tlen) {
+  // TODO: Replace with ICU equivalent
+  printf("MY_COLLATION_HANDLER wrapper_strnncollsp called\n");
+  return my_strnncollsp_uca_900(cs, s, slen, t, tlen);
+}
+
+static size_t wrapper_strnxfrm(const CHARSET_INFO *cs, uchar *dst,
+                               size_t dstlen,
+                               uint num_codepoints [[maybe_unused]],
+                               const uchar *src, size_t srclen, uint flags) {
+  // TODO: Replace with ICU equivalent
+  printf("MY_COLLATION_HANDLER wrapper_strnxfrm called\n");
+  return my_strnxfrm_uca_900(cs, dst, dstlen, num_codepoints, src, srclen,
+                             flags);
+}
+
+static size_t wrapper_my_strnxfrmlen_uca_900(const CHARSET_INFO *cs,
+                                             size_t len) {
+  // TODO: Replace with ICU equivalent
+  printf("MY_COLLATION_HANDLER wrapper_my_strnxfrmlen_uca_900 called\n");
+  return my_strnxfrmlen_uca_900(cs, len);
+}
+
+bool wrapper_my_like_range_mb(const CHARSET_INFO *cs, const char *ptr,
+                              size_t ptr_length, char escape, char w_one,
+                              char w_many, size_t res_length, char *min_str,
+                              char *max_str, size_t *min_length,
+                              size_t *max_length) {
+  // TODO: Replace with ICU equivalent
+  printf("MY_COLLATION_HANDLER wrapper_my_like_range_mb called\n");
+  return my_like_range_mb(cs, ptr, ptr_length, escape, w_one, w_many,
+                          res_length, min_str, max_str, min_length, max_length);
+}
+
+static int wrapper_my_wildcmp_uca(const CHARSET_INFO *cs, const char *str,
+                                  const char *str_end, const char *wildstr,
+                                  const char *wildend, int escape, int w_one,
+                                  int w_many) {
+  // TODO: Replace with ICU equivalent
+  printf("MY_COLLATION_HANDLER wrapper_my_wildcmp_uca called\n");
+  return my_wildcmp_uca(cs, str, str_end, wildstr, wildend, escape, w_one,
+                        w_many);
+}
+
+static int wrapper_my_strcasecmp_uca(const CHARSET_INFO *cs, const char *s,
+                                     const char *t) {
+  // TODO: Replace with ICU equivalent
+  printf("MY_COLLATION_HANDLER wrapper_my_strcasecmp_uca called\n");
+  return my_strcasecmp_uca(cs, s, t);
+}
+
+uint wrapper_my_instr_mb(const CHARSET_INFO *cs, const char *b, size_t b_length,
+                         const char *s, size_t s_length, my_match_t *match,
+                         uint nmatch) {
+  // TODO: Replace with ICU equivalent
+  printf("MY_COLLATION_HANDLER wrapper_my_instr_mb called\n");
+  return my_instr_mb(cs, b, b_length, s, s_length, match, nmatch);
+}
+
+static void wrapper_my_hash_sort_uca_900(const CHARSET_INFO *cs, const uchar *s,
+                                         size_t slen, uint64 *n1, uint64 *) {
+  // TODO: Replace with ICU equivalent
+  printf("MY_COLLATION_HANDLER wrapper_my_hash_sort_uca_900 called\n");
+  my_hash_sort_uca_900(cs, s, slen, n1, nullptr);
+}
+
+bool wrapper_my_propagate_uca_900(const CHARSET_INFO *cs,
+                                  const uchar *str [[maybe_unused]],
+                                  size_t length [[maybe_unused]]) {
+  // TODO: Replace with ICU equivalent
+  printf("MY_COLLATION_HANDLER wrapper_my_propagate_uca_900 called\n");
+  return my_propagate_uca_900(cs, str, length);
+}
+
+MY_COLLATION_HANDLER my_collation_icu_handler = {
+    my_coll_init_uca,    // TODO: Replace with ICU equivalent
+    my_coll_uninit_uca,  // TODO: Replace with ICU equivalent
+    wrapper_strnncoll,
+    wrapper_strnncollsp,
+    wrapper_strnxfrm,
+    wrapper_my_strnxfrmlen_uca_900,
+    wrapper_my_like_range_mb,
+    wrapper_my_wildcmp_uca,
+    wrapper_my_strcasecmp_uca,
+    wrapper_my_instr_mb,
+    wrapper_my_hash_sort_uca_900,
+    wrapper_my_propagate_uca_900};
 
 /*
   We consider bytes with code more than 127 as a letter.
@@ -6930,7 +7020,7 @@ CHARSET_INFO my_charset_utf8mb3_vietnamese_ci = {
     PAD_SPACE};
 
 extern MY_CHARSET_HANDLER my_charset_utf8mb4_handler;
-extern MY_CHARSET_HANDLER my_charset_utf8mb4_handler_lars;
+extern MY_CHARSET_HANDLER my_charset_icu_handler;
 
 #define MY_CS_UTF8MB4_UCA_FLAGS \
   (MY_CS_COMPILED | MY_CS_STRNXFRM | MY_CS_UNICODE | MY_CS_UNICODE_SUPPLEMENT)
@@ -11966,37 +12056,37 @@ CHARSET_INFO my_charset_utf8mb4_mn_cyrl_0900_as_cs = {
     &my_collation_uca_900_handler,
     NO_PAD};
 
-CHARSET_INFO my_charset_utf8mb4_lars_0900 = {
+CHARSET_INFO my_charset_utf8mb4_icu_ai_ci = {
     324,
     0,
-    0,                       /* number       */
-    MY_CS_UTF8MB4_UCA_FLAGS, /* state    */
-    MY_UTF8MB4,              /* csname       */
-    MY_UTF8MB4 "_lars_0900", /* m_coll_name  */
-    "",                      /* comment      */
-    nullptr,                 /* tailoring    */
-    nullptr,                 /* coll_param   */
-    ctype_utf8,              /* ctype        */
-    nullptr,                 /* to_lower     */
-    nullptr,                 /* to_upper     */
-    nullptr,                 /* sort_order   */
-    &my_uca_v900,            /* uca_900      */
-    nullptr,                 /* tab_to_uni   */
-    nullptr,                 /* tab_from_uni */
-    &my_unicase_unicode900,  /* caseinfo     */
-    nullptr,                 /* state_map    */
-    nullptr,                 /* ident_map    */
-    0,                       /* strxfrm_multiply */
-    1,                       /* caseup_multiply  */
-    1,                       /* casedn_multiply  */
-    1,                       /* mbminlen      */
-    4,                       /* mbmaxlen      */
-    1,                       /* mbmaxlenlen   */
-    9,                       /* min_sort_char */
-    0x10FFFF,                /* max_sort_char */
-    ' ',                     /* pad char      */
-    false,                   /* escape_with_backslash_is_dangerous */
-    1,                       /* levels_for_compare */
-    &my_charset_utf8mb4_handler_lars,
-    &my_collation_handler_lars,
+    0,                         /* number       */
+    MY_CS_UTF8MB4_UCA_FLAGS,   /* state    */
+    MY_UTF8MB4,                /* csname       */
+    MY_UTF8MB4 "_icu_ai_ci",   /* m_coll_name  */
+    "Temporary ICU collation", /* comment      */
+    nullptr,                   /* tailoring    */
+    nullptr,                   /* coll_param   */
+    ctype_utf8,                /* ctype        */
+    nullptr,                   /* to_lower     */
+    nullptr,                   /* to_upper     */
+    nullptr,                   /* sort_order   */
+    &my_uca_v900,              /* uca_900      */
+    nullptr,                   /* tab_to_uni   */
+    nullptr,                   /* tab_from_uni */
+    &my_unicase_unicode900,    /* caseinfo     */
+    nullptr,                   /* state_map    */
+    nullptr,                   /* ident_map    */
+    0,                         /* strxfrm_multiply */
+    1,                         /* caseup_multiply  */
+    1,                         /* casedn_multiply  */
+    1,                         /* mbminlen      */
+    4,                         /* mbmaxlen      */
+    1,                         /* mbmaxlenlen   */
+    9,                         /* min_sort_char */
+    0x10FFFF,                  /* max_sort_char */
+    ' ',                       /* pad char      */
+    false,                     /* escape_with_backslash_is_dangerous */
+    1,                         /* levels_for_compare */
+    &my_charset_icu_handler,
+    &my_collation_icu_handler,
     NO_PAD};
