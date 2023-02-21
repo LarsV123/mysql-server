@@ -22,6 +22,8 @@
 
 ADD_WSHADOW_WARNING()
 
+MY_INCLUDE_SYSTEM_DIRECTORIES(ICU)
+
 SET(STRINGS_SOURCES
   ctype-big5.cc
   ctype-bin.cc
@@ -40,6 +42,7 @@ SET(STRINGS_SOURCES
   ctype-sjis.cc
   ctype-tis620.cc
   ctype-uca.cc
+  ctype-icu.cc
   ctype-ucs2.cc
   ctype-ujis.cc
   ctype-utf8.cc
@@ -58,7 +61,7 @@ SET(STRINGS_SOURCES
   xml.cc
 )
 
-MYSQL_ADD_EXECUTABLE(uca9dump uca9-dump.cc SKIP_INSTALL)
+MYSQL_ADD_EXECUTABLE(uca9dump uca9-dump.cc LINK_LIBRARIES ${ICU_LIBRARIES} SKIP_INSTALL)
 
 MY_CHECK_CXX_COMPILER_WARNING("-Wmissing-profile" HAS_MISSING_PROFILE)
 IF(HAS_MISSING_PROFILE)
@@ -93,7 +96,7 @@ ADD_CONVENIENCE_LIBRARY(strings ${STRINGS_SOURCES}
   )
 
 MYSQL_ADD_EXECUTABLE(conf_to_src conf_to_src.cc SKIP_INSTALL)
-TARGET_LINK_LIBRARIES(conf_to_src strings)
+TARGET_LINK_LIBRARIES(conf_to_src strings ${ICU_LIBRARIES})
 
 IF(HAS_MISSING_PROFILE)
   ADD_COMPILE_FLAGS(conf_to_src.cc COMPILE_FLAGS ${HAS_MISSING_PROFILE})
