@@ -46,6 +46,7 @@
 #include <map>
 #include <utility>
 
+#include "ctype-icu.h"
 #include "m_ctype.h"
 #include "m_string.h"
 #include "my_byteorder.h"
@@ -6058,6 +6059,7 @@ static int wrapper_strnncoll(const CHARSET_INFO *cs, const uchar *s,
   // TODO: Replace with ICU equivalent
   printf("MY_COLLATION_HANDLER wrapper_strnncoll called\n");
   return my_strnncoll_uca_900(cs, s, slen, t, tlen, t_is_prefix);
+  // return icu_strnncoll(cs, s, slen, t, tlen, t_is_prefix);
 }
 
 static int wrapper_strnncollsp(const CHARSET_INFO *cs, const uchar *s,
@@ -6065,6 +6067,7 @@ static int wrapper_strnncollsp(const CHARSET_INFO *cs, const uchar *s,
   // TODO: Replace with ICU equivalent
   printf("MY_COLLATION_HANDLER wrapper_strnncollsp called\n");
   return my_strnncollsp_uca_900(cs, s, slen, t, tlen);
+  // return icu_strnncoll(cs, s, slen, t, tlen);
 }
 
 static size_t wrapper_strnxfrm(const CHARSET_INFO *cs, uchar *dst,
