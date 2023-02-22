@@ -41,6 +41,7 @@
 #include "my_byteorder.h"
 #include "my_compiler.h"
 
+#include "ctype-icu.h"
 #include "my_inttypes.h"
 #include "my_macros.h"
 #include "my_uctype.h"  // IWYU pragma: keep
@@ -7775,7 +7776,9 @@ static size_t wrapper_my_caseup_utf8mb4(const CHARSET_INFO *cs, char *src,
                                         size_t dstlen) {
   // TODO: Replace with ICU equivalent
   printf("wrapper_my_caseup_utf8mb4 called\n");
+  say_hello();
   return my_caseup_utf8mb4(cs, src, srclen, dst, dstlen);
+  // return icu_caseup_utf8mb4(cs, src, srclen, dst, dstlen);
 }
 
 static size_t wrapper_my_casedn_utf8mb4(const CHARSET_INFO *cs, char *src,
