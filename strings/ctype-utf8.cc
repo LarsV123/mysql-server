@@ -36,11 +36,13 @@
 #include <sys/types.h>
 #include <algorithm>
 #include <type_traits>
+#include "ctype-icu.h"
 
 #include "m_ctype.h"
 #include "my_byteorder.h"
 #include "my_compiler.h"
 
+#include "ctype-icu.h"
 #include "my_inttypes.h"
 #include "my_macros.h"
 #include "my_uctype.h"  // IWYU pragma: keep
@@ -7383,6 +7385,9 @@ static size_t my_caseup_str_utf8mb4(const CHARSET_INFO *cs, char *src) {
 
 static size_t my_casedn_utf8mb4(const CHARSET_INFO *cs, char *src,
                                 size_t srclen, char *dst, size_t dstlen) {
+  // Call my ICU method in a random place to check that it works
+  say_hello();
+
   my_wc_t wc;
   int srcres, dstres;
   char *srcend = src + srclen, *dstend = dst + dstlen, *dst0 = dst;

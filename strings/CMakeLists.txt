@@ -22,6 +22,8 @@
 
 ADD_WSHADOW_WARNING()
 
+# MY_INCLUDE_SYSTEM_DIRECTORIES(ICU)
+
 SET(STRINGS_SOURCES
   ctype-big5.cc
   ctype-bin.cc
@@ -40,6 +42,7 @@ SET(STRINGS_SOURCES
   ctype-sjis.cc
   ctype-tis620.cc
   ctype-uca.cc
+  ctype-icu.cc
   ctype-ucs2.cc
   ctype-ujis.cc
   ctype-utf8.cc
@@ -91,9 +94,10 @@ ADD_DEFINITIONS(-DDISABLE_MYSQL_THREAD_H)
 ADD_CONVENIENCE_LIBRARY(strings ${STRINGS_SOURCES}
   LINK_LIBRARIES mysys
   )
-
+  
 MYSQL_ADD_EXECUTABLE(conf_to_src conf_to_src.cc SKIP_INSTALL)
 TARGET_LINK_LIBRARIES(conf_to_src strings)
+TARGET_LINK_LIBRARIES(strings ${ICU_LIBRARIES})
 
 IF(HAS_MISSING_PROFILE)
   ADD_COMPILE_FLAGS(conf_to_src.cc COMPILE_FLAGS ${HAS_MISSING_PROFILE})

@@ -45,6 +45,13 @@
 using icu::RegexMatcher;
 using icu::UnicodeString;
 
+void say_hello() {
+  icu::UnicodeString hello("Hello, ICU! This is gen_keyword_list.cc");
+  std::string hello_utf8;
+  hello.toUTF8String(hello_utf8);
+  std::cout << hello_utf8 << std::endl;
+}
+
 bool icu_error(const UErrorCode &status) {
   if (!U_FAILURE(status)) {
     return false;
