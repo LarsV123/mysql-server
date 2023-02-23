@@ -8,8 +8,10 @@
 #include <unicode/ucol.h>
 #include <unicode/unistr.h>
 #include <unicode/unorm2.h>
+#include <unicode/usearch.h>
 #include <unicode/ustring.h>
 #include <unicode/utypes.h>
+#include "unicode/coll.h"
 
 // See examples at
 // https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/ustring/ustring.cpp
@@ -73,22 +75,47 @@ size_t icu_casedn(const CHARSET_INFO *cs [[maybe_unused]], char *src,
 
 // strnncoll - compares two strings (use in wrapper_strnncoll and
 // wrapper_strnncollsp?)
-// int icu_strnncoll(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
-//                   size_t slen [[maybe_unused]], const uchar *t,
-//                   size_t tlen [[maybe_unused]],
-//                   bool t_is_prefix [[maybe_unused]]) {
-//   printf("icu_strnncoll called in ctype-icu.cc!\n");
-//   // size_t len = std::min(slen, tlen);
-//   // int cmp = len == 0 ? 0 : memcmp(s, t, len);
-//   // return cmp ? cmp : (int)((t_is_prefix ? len : slen) - tlen);
+int icu_strnncoll(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
+                  size_t slen [[maybe_unused]], const uchar *t,
+                  size_t tlen [[maybe_unused]],
+                  bool t_is_prefix [[maybe_unused]]) {
+  printf("icu_strnncoll called in ctype-icu.cc!\n");
 
-//   // Create a collator for the given locale
-//   icu::UErrorCode status = U_ZERO_ERROR;
-//   icu::Collator *collator = icu::Collator::createInstance(status);
+  // Create a collator for the given locale
+  icu::Locale locale = icu::Locale::getDefault();
+  UErrorCode status = U_ZERO_ERROR;
+  icu::Collator *collator = 0;
+  collator = icu::Collator::createInstance(locale, status);
 
-//   // Compare the two strings
-//   icu::UnicodeString s1 = icu::UnicodeString::fromUTF8((const char *)s);
-//   icu::UnicodeString s2 = icu::UnicodeString::fromUTF8((const char *)t);
-//   int cmp = collator->compare(s1, s2);
-//   return cmp;
-// }
+  /// Create StringPieces from the input strings
+  icu::StringPiece sp1 =
+      icu::StringPiece(reinterpret_cast<const char *>(s), slen);
+  icu::StringPiece sp2 =
+      icu::StringPiece(reinterpret_cast<const char *>(t), tlen);
+
+  // Compare the two strings
+  int cmp = collator->compareUTF8(sp1, sp2, status);
+  return cmp;
+}
+
+int icu_strnncollsp(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
+                    size_t slen [[maybe_unused]], const uchar *t,
+                    size_t tlen [[maybe_unused]]) {
+  printf("icu_strnncollsp called in ctype-icu.cc!\n");
+
+  // Create a collator for the given locale
+  icu::Locale locale = icu::Locale::getDefault();
+  UErrorCode status = U_ZERO_ERROR;
+  icu::Collator *collator = 0;
+  collator = icu::Collator::createInstance(locale, status);
+
+  // Create StringPieces from the input strings
+  icu::StringPiece sp1 =
+      icu::StringPiece(reinterpret_cast<const char *>(s), slen);
+  icu::StringPiece sp2 =
+      icu::StringPiece(reinterpret_cast<const char *>(t), tlen);
+
+  // Compare the two strings
+  int cmp = collator->compareUTF8(sp1, sp2, status);
+  return cmp;
+}

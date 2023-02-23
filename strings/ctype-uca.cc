@@ -6058,16 +6058,16 @@ static int wrapper_strnncoll(const CHARSET_INFO *cs, const uchar *s,
                              bool t_is_prefix) {
   // TODO: Replace with ICU equivalent
   printf("MY_COLLATION_HANDLER wrapper_strnncoll called\n");
-  return my_strnncoll_uca_900(cs, s, slen, t, tlen, t_is_prefix);
-  // return icu_strnncoll(cs, s, slen, t, tlen, t_is_prefix);
+  // return my_strnncoll_uca_900(cs, s, slen, t, tlen, t_is_prefix);
+  return icu_strnncoll(cs, s, slen, t, tlen, t_is_prefix);
 }
 
 static int wrapper_strnncollsp(const CHARSET_INFO *cs, const uchar *s,
                                size_t slen, const uchar *t, size_t tlen) {
   // TODO: Replace with ICU equivalent
   printf("MY_COLLATION_HANDLER wrapper_strnncollsp called\n");
-  return my_strnncollsp_uca_900(cs, s, slen, t, tlen);
-  // return icu_strnncoll(cs, s, slen, t, tlen);
+  // return my_strnncollsp_uca_900(cs, s, slen, t, tlen);
+  return icu_strnncollsp(cs, s, slen, t, tlen);
 }
 
 static size_t wrapper_strnxfrm(const CHARSET_INFO *cs, uchar *dst,
