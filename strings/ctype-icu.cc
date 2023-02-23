@@ -82,10 +82,16 @@ int icu_strnncoll(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
   printf("icu_strnncoll called in ctype-icu.cc!\n");
 
   // Create a collator for the given locale
-  icu::Locale locale = icu::Locale::getDefault();
-  UErrorCode status = U_ZERO_ERROR;
-  icu::Collator *collator = 0;
-  collator = icu::Collator::createInstance(locale, status);
+  static UErrorCode status;
+  static icu::Collator *collator;
+  if (collator == nullptr) {
+    printf("Creating collator in icu_strnncollsp\n");
+    status = U_ZERO_ERROR;
+    icu::Locale locale = icu::Locale::getDefault();
+    collator = icu::Collator::createInstance(locale, status);
+  } else {
+    printf("Collator already created in icu_strnncollsp\n");
+  }
 
   /// Create StringPieces from the input strings
   icu::StringPiece sp1 =
@@ -98,16 +104,23 @@ int icu_strnncoll(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
   return cmp;
 }
 
+// TODO: implement difference between strnncoll and strnncollsp
 int icu_strnncollsp(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
                     size_t slen [[maybe_unused]], const uchar *t,
                     size_t tlen [[maybe_unused]]) {
   printf("icu_strnncollsp called in ctype-icu.cc!\n");
 
   // Create a collator for the given locale
-  icu::Locale locale = icu::Locale::getDefault();
-  UErrorCode status = U_ZERO_ERROR;
-  icu::Collator *collator = 0;
-  collator = icu::Collator::createInstance(locale, status);
+  static UErrorCode status;
+  static icu::Collator *collator;
+  if (collator == nullptr) {
+    printf("Creating collator in icu_strnncollsp\n");
+    status = U_ZERO_ERROR;
+    icu::Locale locale = icu::Locale::getDefault();
+    collator = icu::Collator::createInstance(locale, status);
+  } else {
+    printf("Collator already created in icu_strnncollsp\n");
+  }
 
   // Create StringPieces from the input strings
   icu::StringPiece sp1 =
