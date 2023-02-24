@@ -267,7 +267,7 @@ extern CHARSET_INFO my_charset_utf8mb4_0900_bin;
 
 extern CHARSET_INFO my_charset_gb18030_unicode_520_ci;
 
-extern CHARSET_INFO my_charset_utf8mb4_icu_ai_ci;
+extern CHARSET_INFO icu_charset_utf8mb4_nb_ai_ci;
 
 bool init_compiled_charsets(myf flags [[maybe_unused]]) {
   CHARSET_INFO *cs;
@@ -528,7 +528,7 @@ bool init_compiled_charsets(myf flags [[maybe_unused]]) {
   add_compiled_collation(&my_charset_utf32_unicode_520_ci);
   add_compiled_collation(&my_charset_utf32_vietnamese_ci);
 
-  add_compiled_collation(&my_charset_utf8mb4_icu_ai_ci);
+  add_compiled_collation(&icu_charset_utf8mb4_nb_ai_ci);
 
   /* Copy compiled charsets */
   for (cs = compiled_charsets; cs->m_coll_name; cs++)
