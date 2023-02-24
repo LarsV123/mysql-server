@@ -5086,6 +5086,8 @@ static size_t my_strnxfrm_uca_900(const CHARSET_INFO *cs, uchar *dst,
                                   uint num_codepoints [[maybe_unused]],
                                   const uchar *src, size_t srclen, uint flags) {
   if (cs->cset->mb_wc == my_mb_wc_utf8mb4_thunk) {
+    printf("cs->cset->mb_wc == my_mb_wc_utf8mb4_thunk\n");
+    // This is the path we take
     switch (cs->levels_for_compare) {
       case 1:
         return my_strnxfrm_uca_900_tmpl<Mb_wc_utf8mb4, 1>(
@@ -5103,6 +5105,7 @@ static size_t my_strnxfrm_uca_900(const CHARSET_INFO *cs, uchar *dst,
             cs, Mb_wc_utf8mb4(), dst, dstlen, src, srclen, flags);
     }
   } else {
+    printf("cs->cset->mb_wc != my_mb_wc_utf8mb4_thunk\n");
     Mb_wc_through_function_pointer mb_wc(cs);
     switch (cs->levels_for_compare) {
       case 1:
@@ -6075,16 +6078,21 @@ static size_t wrapper_strnxfrm(const CHARSET_INFO *cs, uchar *dst,
                                uint num_codepoints [[maybe_unused]],
                                const uchar *src, size_t srclen, uint flags) {
   // TODO: Replace with ICU equivalent
-  printf("MY_COLLATION_HANDLER wrapper_strnxfrm called\n");
-  return my_strnxfrm_uca_900(cs, dst, dstlen, num_codepoints, src, srclen,
-                             flags);
+  // return my_strnxfrm_uca_900(cs, dst, dstlen, num_codepoints, src, srclen,
+  //                            flags);
+  return icu_strnxfrm(cs, dst, dstlen, num_codepoints, src, srclen, flags);
 }
 
 static size_t wrapper_my_strnxfrmlen_uca_900(const CHARSET_INFO *cs,
                                              size_t len) {
   // TODO: Replace with ICU equivalent
-  printf("MY_COLLATION_HANDLER wrapper_my_strnxfrmlen_uca_900 called\n");
-  return my_strnxfrmlen_uca_900(cs, len);
+  auto res = my_strnxfrmlen_uca_900(cs, len);
+  printf(
+      "MY_COLLATION_HANDLER wrapper_my_strnxfrmlen_uca_900 called, with result "
+      "%ld \n",
+      res);
+  return res;
+  // return my_strnxfrmlen_uca_900(cs, len);
 }
 
 bool wrapper_my_like_range_mb(const CHARSET_INFO *cs, const char *ptr,

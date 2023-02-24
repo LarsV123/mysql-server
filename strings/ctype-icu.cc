@@ -1,5 +1,6 @@
 #include "ctype-icu.h"
 #include <stdio.h>
+#include <cstring>
 #include <iostream>
 
 #include <unicode/errorcode.h>
@@ -11,16 +12,14 @@
 #include <unicode/usearch.h>
 #include <unicode/ustring.h>
 #include <unicode/utypes.h>
+#include "mb_wc.h"
 #include "unicode/coll.h"
 
 // See examples at
 // https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/ustring/ustring.cpp
 
-void say_hello() {
-  icu::UnicodeString hello("Hello, ICU! This is ctype-icu.cc");
-  std::string hello_utf8;
-  hello.toUTF8String(hello_utf8);
-  std::cout << hello_utf8 << std::endl;
+void log(const char *msg) {
+  std::cout << "ctype-icu.cc @ " << msg << std::endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -30,7 +29,7 @@ void say_hello() {
 // caseup - converts the given string to uppercase using length
 size_t icu_caseup(const CHARSET_INFO *cs [[maybe_unused]], char *src,
                   size_t srclen [[maybe_unused]], char *dst, size_t dstlen) {
-  printf("icu_caseup called in ctype-icu.cc\n");
+  log("icu_caseup");
   // TODO: Add collator for locale support
   // TODO: Split this into caseup_str and caseup
 
@@ -50,7 +49,7 @@ size_t icu_caseup(const CHARSET_INFO *cs [[maybe_unused]], char *src,
 // casedn - converts the given string to lowercase using length
 size_t icu_casedn(const CHARSET_INFO *cs [[maybe_unused]], char *src,
                   size_t srclen [[maybe_unused]], char *dst, size_t dstlen) {
-  printf("icu_casedn called in ctype-icu.cc\n");
+  log("icu_casedn");
   // TODO: Add collator for locale support
   // TODO: Split this into casedn_str and casedn
 
@@ -70,49 +69,20 @@ size_t icu_casedn(const CHARSET_INFO *cs [[maybe_unused]], char *src,
 ///////////////////////////////////////////////////////////////////////////
 // Collation functions
 ///////////////////////////////////////////////////////////////////////////
-// size_t icu_strnxfrm(const CHARSET_INFO *cs, uchar *dst, size_t dstlen,
-//                     uint num_codepoints [[maybe_unused]], const uchar *src,
-//                     size_t srclen, uint flags) {
-//   printf("icu_strnxfrm called in ctype-icu.cc\n");
-
-// }
 
 // strnncoll - compares two strings
 int icu_strnncoll_utf8(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
                        size_t slen, const uchar *t, size_t tlen,
                        bool t_is_prefix [[maybe_unused]]) {
-  // TODO: implement t_is_prefix (PAD SPACE)?
-  printf("icu_strnncoll_utf8 called in ctype-icu.cc!\n");
-
-  // Create a collator for the given locale
-  static UErrorCode status;
-  static icu::Collator *collator;
-  if (collator == nullptr) {
-    printf("Creating collator in icu_strnncollsp_utf8\n");
-    status = U_ZERO_ERROR;
-    // TODO: Find the correct locale
-    icu::Locale locale = icu::Locale::getDefault();
-    collator = icu::Collator::createInstance(locale, status);
-  } else {
-    printf("Collator already created in icu_strnncollsp_utf8\n");
-  }
-
-  /// Create StringPieces from the input strings
-  icu::StringPiece sp1 =
-      icu::StringPiece(reinterpret_cast<const char *>(s), slen);
-  icu::StringPiece sp2 =
-      icu::StringPiece(reinterpret_cast<const char *>(t), tlen);
-
-  // Compare the two strings
-  int cmp = collator->compareUTF8(sp1, sp2, status);
-  return cmp;
+  log("icu_strnncoll_utf8");
+  return icu_strnncollsp_utf8(cs, s, slen, t, tlen);
 }
 
-// strnncoll - compares two strings (ignoring trailing spaces)
+// strnncollsp - compares two strings (ignoring trailing spaces)
 int icu_strnncollsp_utf8(const CHARSET_INFO *cs [[maybe_unused]],
                          const uchar *s, size_t slen, const uchar *t,
                          size_t tlen) {
-  printf("icu_strnncollsp_utf8 called in ctype-icu.cc!\n");
+  log("icu_strnncollsp_utf8");
 
   // Create a collator for the given locale
   static UErrorCode status;
@@ -120,8 +90,7 @@ int icu_strnncollsp_utf8(const CHARSET_INFO *cs [[maybe_unused]],
   if (collator == nullptr) {
     printf("Creating collator in icu_strnncollsp_utf8\n");
     status = U_ZERO_ERROR;
-    // TODO: Find the correct locale
-    icu::Locale locale = icu::Locale::getDefault();
+    icu::Locale locale = icu::Locale(cs->comment);
     collator = icu::Collator::createInstance(locale, status);
   } else {
     printf("Collator already created in icu_strnncollsp_utf8\n");
@@ -136,4 +105,107 @@ int icu_strnncollsp_utf8(const CHARSET_INFO *cs [[maybe_unused]],
   // Compare the two strings
   int cmp = collator->compareUTF8(sp1, sp2, status);
   return cmp;
+}
+
+// makes a sort key suitable for memcmp() corresponding to the given string
+// size_t icu_strnxfrm_utf8(const CHARSET_INFO *cs [[maybe_unused]],
+//                          uchar *dst [[maybe_unused]],
+//                          size_t dstlen [[maybe_unused]],
+//                          uint num_codepoints [[maybe_unused]],
+//                          const uchar *src [[maybe_unused]],
+//                          size_t srclen [[maybe_unused]],
+//                          uint flags [[maybe_unused]]) {
+//   printf("icu_strnxfrm_utf8 called in ctype-icu.cc\n");
+
+//   // Create a collator for the given locale
+//   static UErrorCode status;
+//   static icu::Collator *collator;
+//   if (collator == nullptr) {
+//     printf("Creating collator in icu_strnxfrm_utf8\n");
+//     status = U_ZERO_ERROR;
+//     icu::Locale locale = icu::Locale(cs->comment);
+//     collator = icu::Collator::createInstance(locale, status);
+//   } else {
+//     printf("Collator already created in icu_strnxfrm_utf8\n");
+//   }
+//   // Create a UnicodeString from the input string
+//   auto sp = icu::StringPiece(reinterpret_cast<const char *>(src), srclen);
+//   auto input = icu::UnicodeString::fromUTF8(sp);
+
+//   // Get sort key
+//   auto sortKey = collator->getSortKey(input, status);
+//   return sortKey;
+// }
+
+// Makes a sort key suitable for memcmp() corresponding to the given string
+// using ICU.
+// Equivalent to my_strnxfrm_uca_900_tmpl
+template <class Mb_wc, int LEVELS_FOR_COMPARE>
+static size_t icu_strnxfrm_tmpl(const CHARSET_INFO *cs,
+                                const Mb_wc mb_wc [[maybe_unused]], uchar *dst,
+                                size_t dstlen, const uchar *src, size_t srclen,
+                                uint flags [[maybe_unused]]) {
+  log("icu_strnxfrm_tmpl");
+
+  UErrorCode status = U_ZERO_ERROR;
+  const char *locale_str = cs->comment;
+  icu::Locale locale(locale_str);
+
+  auto sp = icu::StringPiece(reinterpret_cast<const char *>(src), srclen);
+  auto input = icu::UnicodeString::fromUTF8(sp);
+
+  // Create a collator for the given locale
+  icu::Collator *collator = icu::Collator::createInstance(locale, status);
+
+  // Set the collation strength based on the number of levels for comparison
+  switch (LEVELS_FOR_COMPARE) {
+    case 1:
+      collator->setStrength(icu::Collator::PRIMARY);
+      break;
+    case 2:
+      collator->setStrength(icu::Collator::SECONDARY);
+      break;
+    case 3:
+      collator->setStrength(icu::Collator::TERTIARY);
+      break;
+    default:
+      collator->setStrength(icu::Collator::IDENTICAL);
+      break;
+  }
+
+  // Generate the sort key using the collator
+  int32_t sort_key_length = collator->getSortKey(input, nullptr, 0);
+  if (dstlen < static_cast<size_t>(sort_key_length)) {
+    // Output buffer is too small, return required size
+    delete collator;
+    return sort_key_length;
+  }
+  collator->getSortKey(input, reinterpret_cast<uint8_t *>(dst),
+                       sort_key_length);
+  delete collator;
+
+  return static_cast<size_t>(sort_key_length);
+}
+
+// Equivalent to my_strnxfrm_uca_900
+size_t icu_strnxfrm(const CHARSET_INFO *cs, uchar *dst, size_t dstlen,
+                    uint num_codepoints [[maybe_unused]], const uchar *src,
+                    size_t srclen, uint flags) {
+  log("icu_strnxfrm");
+  switch (cs->levels_for_compare) {
+    case 1:
+      return icu_strnxfrm_tmpl<Mb_wc_utf8mb4, 1>(cs, Mb_wc_utf8mb4(), dst,
+                                                 dstlen, src, srclen, flags);
+    case 2:
+      return icu_strnxfrm_tmpl<Mb_wc_utf8mb4, 2>(cs, Mb_wc_utf8mb4(), dst,
+                                                 dstlen, src, srclen, flags);
+    default:
+      assert(false);
+    case 3:
+      return icu_strnxfrm_tmpl<Mb_wc_utf8mb4, 3>(cs, Mb_wc_utf8mb4(), dst,
+                                                 dstlen, src, srclen, flags);
+    case 4:
+      return icu_strnxfrm_tmpl<Mb_wc_utf8mb4, 4>(cs, Mb_wc_utf8mb4(), dst,
+                                                 dstlen, src, srclen, flags);
+  }
 }
