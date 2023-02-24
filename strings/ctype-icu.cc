@@ -31,6 +31,8 @@ void say_hello() {
 size_t icu_caseup(const CHARSET_INFO *cs [[maybe_unused]], char *src,
                   size_t srclen [[maybe_unused]], char *dst, size_t dstlen) {
   printf("icu_caseup called in ctype-icu.cc\n");
+  // TODO: Add collator for locale support
+  // TODO: Split this into caseup_str and caseup
 
   // Convert the input UTF-8 string to a UnicodeString
   icu::UnicodeString input = icu::UnicodeString::fromUTF8(src);
@@ -49,6 +51,8 @@ size_t icu_caseup(const CHARSET_INFO *cs [[maybe_unused]], char *src,
 size_t icu_casedn(const CHARSET_INFO *cs [[maybe_unused]], char *src,
                   size_t srclen [[maybe_unused]], char *dst, size_t dstlen) {
   printf("icu_casedn called in ctype-icu.cc\n");
+  // TODO: Add collator for locale support
+  // TODO: Split this into casedn_str and casedn
 
   // Convert the input UTF-8 string to a UnicodeString
   icu::UnicodeString input = icu::UnicodeString::fromUTF8(src);
@@ -74,24 +78,23 @@ size_t icu_casedn(const CHARSET_INFO *cs [[maybe_unused]], char *src,
 // }
 
 // strnncoll - compares two strings
-int icu_strnncoll(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
-                  size_t slen [[maybe_unused]], const uchar *t,
-                  size_t tlen [[maybe_unused]],
-                  bool t_is_prefix [[maybe_unused]]) {
+int icu_strnncoll_utf8(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
+                       size_t slen, const uchar *t, size_t tlen,
+                       bool t_is_prefix [[maybe_unused]]) {
   // TODO: implement t_is_prefix (PAD SPACE)?
-  printf("icu_strnncoll called in ctype-icu.cc!\n");
+  printf("icu_strnncoll_utf8 called in ctype-icu.cc!\n");
 
   // Create a collator for the given locale
   static UErrorCode status;
   static icu::Collator *collator;
   if (collator == nullptr) {
-    printf("Creating collator in icu_strnncollsp\n");
+    printf("Creating collator in icu_strnncollsp_utf8\n");
     status = U_ZERO_ERROR;
     // TODO: Find the correct locale
     icu::Locale locale = icu::Locale::getDefault();
     collator = icu::Collator::createInstance(locale, status);
   } else {
-    printf("Collator already created in icu_strnncollsp\n");
+    printf("Collator already created in icu_strnncollsp_utf8\n");
   }
 
   /// Create StringPieces from the input strings
@@ -106,22 +109,22 @@ int icu_strnncoll(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
 }
 
 // strnncoll - compares two strings (ignoring trailing spaces)
-int icu_strnncollsp(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
-                    size_t slen [[maybe_unused]], const uchar *t,
-                    size_t tlen [[maybe_unused]]) {
-  printf("icu_strnncollsp called in ctype-icu.cc!\n");
+int icu_strnncollsp_utf8(const CHARSET_INFO *cs [[maybe_unused]],
+                         const uchar *s, size_t slen, const uchar *t,
+                         size_t tlen) {
+  printf("icu_strnncollsp_utf8 called in ctype-icu.cc!\n");
 
   // Create a collator for the given locale
   static UErrorCode status;
   static icu::Collator *collator;
   if (collator == nullptr) {
-    printf("Creating collator in icu_strnncollsp\n");
+    printf("Creating collator in icu_strnncollsp_utf8\n");
     status = U_ZERO_ERROR;
     // TODO: Find the correct locale
     icu::Locale locale = icu::Locale::getDefault();
     collator = icu::Collator::createInstance(locale, status);
   } else {
-    printf("Collator already created in icu_strnncollsp\n");
+    printf("Collator already created in icu_strnncollsp_utf8\n");
   }
 
   // Create StringPieces from the input strings
