@@ -7759,23 +7759,28 @@ MY_CHARSET_HANDLER my_charset_utf8mb4_handler = {nullptr, /* init */
                                                  my_strntoull10rnd_8bit,
                                                  my_scan_8bit};
 
+void log(const char *msg [[maybe_unused]]) {
+  // std::cout << "ctype-utf8.cc: " << msg << std::endl;
+}
+
 static size_t wrapper_my_caseup_str_utf8mb4(const CHARSET_INFO *cs, char *src) {
   // TODO: Replace with ICU equivalent
-  printf("wrapper_my_caseup_str_utf8mb4 called\n");
+  log("wrapper_my_caseup_str_utf8mb4");
+  assert(false);
   return my_caseup_str_utf8mb4(cs, src);
 }
 
 static size_t wrapper_my_casedn_str_utf8mb4(const CHARSET_INFO *cs, char *src) {
   // TODO: Replace with ICU equivalent
-  printf("wrapper_my_casedn_str_utf8mb4 called\n");
+  log("wrapper_my_casedn_str_utf8mb4");
+  assert(false);
   return my_caseup_str_utf8mb4(cs, src);
 }
 
 static size_t wrapper_my_caseup_utf8mb4(const CHARSET_INFO *cs, char *src,
                                         size_t srclen, char *dst,
                                         size_t dstlen) {
-  // TODO: Replace with ICU equivalent
-  printf("wrapper_my_caseup_utf8mb4 called\n");
+  log("wrapper_my_caseup_utf8mb4");
   return icu_caseup(cs, src, srclen, dst, dstlen);
   // return my_caseup_utf8mb4(cs, src, srclen, dst, dstlen);
 }
@@ -7783,10 +7788,9 @@ static size_t wrapper_my_caseup_utf8mb4(const CHARSET_INFO *cs, char *src,
 static size_t wrapper_my_casedn_utf8mb4(const CHARSET_INFO *cs, char *src,
                                         size_t srclen, char *dst,
                                         size_t dstlen) {
-  // TODO: Replace with ICU equivalent
-  printf("wrapper_my_casedn_utf8mb4 called\n");
-  // return my_casedn_utf8mb4(cs, src, srclen, dst, dstlen);
+  log("wrapper_my_casedn_utf8mb4");
   return icu_casedn(cs, src, srclen, dst, dstlen);
+  // return my_casedn_utf8mb4(cs, src, srclen, dst, dstlen);
 }
 
 MY_CHARSET_HANDLER my_charset_icu_handler = {

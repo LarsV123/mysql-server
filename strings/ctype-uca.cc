@@ -5086,8 +5086,6 @@ static size_t my_strnxfrm_uca_900(const CHARSET_INFO *cs, uchar *dst,
                                   uint num_codepoints [[maybe_unused]],
                                   const uchar *src, size_t srclen, uint flags) {
   if (cs->cset->mb_wc == my_mb_wc_utf8mb4_thunk) {
-    printf("cs->cset->mb_wc == my_mb_wc_utf8mb4_thunk\n");
-    // This is the path we take
     switch (cs->levels_for_compare) {
       case 1:
         return my_strnxfrm_uca_900_tmpl<Mb_wc_utf8mb4, 1>(
@@ -5105,7 +5103,6 @@ static size_t my_strnxfrm_uca_900(const CHARSET_INFO *cs, uchar *dst,
             cs, Mb_wc_utf8mb4(), dst, dstlen, src, srclen, flags);
     }
   } else {
-    printf("cs->cset->mb_wc != my_mb_wc_utf8mb4_thunk\n");
     Mb_wc_through_function_pointer mb_wc(cs);
     switch (cs->levels_for_compare) {
       case 1:
@@ -6059,16 +6056,12 @@ MY_COLLATION_HANDLER my_collation_uca_900_handler = {
 static int wrapper_strnncoll(const CHARSET_INFO *cs, const uchar *s,
                              size_t slen, const uchar *t, size_t tlen,
                              bool t_is_prefix) {
-  // TODO: Replace with ICU equivalent
-  printf("MY_COLLATION_HANDLER wrapper_strnncoll called\n");
   // return my_strnncoll_uca_900(cs, s, slen, t, tlen, t_is_prefix);
   return icu_strnncoll_utf8(cs, s, slen, t, tlen, t_is_prefix);
 }
 
 static int wrapper_strnncollsp(const CHARSET_INFO *cs, const uchar *s,
                                size_t slen, const uchar *t, size_t tlen) {
-  // TODO: Replace with ICU equivalent
-  printf("MY_COLLATION_HANDLER wrapper_strnncollsp called\n");
   // return my_strnncollsp_uca_900(cs, s, slen, t, tlen);
   return icu_strnncollsp_utf8(cs, s, slen, t, tlen);
 }
@@ -6077,7 +6070,6 @@ static size_t wrapper_strnxfrm(const CHARSET_INFO *cs, uchar *dst,
                                size_t dstlen,
                                uint num_codepoints [[maybe_unused]],
                                const uchar *src, size_t srclen, uint flags) {
-  // TODO: Replace with ICU equivalent
   // return my_strnxfrm_uca_900(cs, dst, dstlen, num_codepoints, src, srclen,
   //                            flags);
   return icu_strnxfrm(cs, dst, dstlen, num_codepoints, src, srclen, flags);

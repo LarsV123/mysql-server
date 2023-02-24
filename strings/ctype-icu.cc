@@ -18,8 +18,8 @@
 // See examples at
 // https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/ustring/ustring.cpp
 
-void log(const char *msg) {
-  std::cout << "ctype-icu.cc @ " << msg << std::endl;
+void log(const char *msg [[maybe_unused]]) {
+  // std::cout << "ctype-icu.cc: " << msg << std::endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -27,6 +27,7 @@ void log(const char *msg) {
 ///////////////////////////////////////////////////////////////////////////
 
 // caseup - converts the given string to uppercase using length
+// Equivalent to my_caseup_utf8mb4
 size_t icu_caseup(const CHARSET_INFO *cs [[maybe_unused]], char *src,
                   size_t srclen [[maybe_unused]], char *dst, size_t dstlen) {
   log("icu_caseup");
@@ -47,6 +48,7 @@ size_t icu_caseup(const CHARSET_INFO *cs [[maybe_unused]], char *src,
 }
 
 // casedn - converts the given string to lowercase using length
+// Equivalent to my_casedn_utf8mb4
 size_t icu_casedn(const CHARSET_INFO *cs [[maybe_unused]], char *src,
                   size_t srclen [[maybe_unused]], char *dst, size_t dstlen) {
   log("icu_casedn");
@@ -88,12 +90,12 @@ int icu_strnncollsp_utf8(const CHARSET_INFO *cs [[maybe_unused]],
   static UErrorCode status;
   static icu::Collator *collator;
   if (collator == nullptr) {
-    printf("Creating collator in icu_strnncollsp_utf8\n");
+    log("Creating collator in icu_strnncollsp_utf8\n");
     status = U_ZERO_ERROR;
     icu::Locale locale = icu::Locale(cs->comment);
     collator = icu::Collator::createInstance(locale, status);
   } else {
-    printf("Collator already created in icu_strnncollsp_utf8\n");
+    log("Collator already created in icu_strnncollsp_utf8\n");
   }
 
   // Create StringPieces from the input strings
@@ -107,38 +109,7 @@ int icu_strnncollsp_utf8(const CHARSET_INFO *cs [[maybe_unused]],
   return cmp;
 }
 
-// makes a sort key suitable for memcmp() corresponding to the given string
-// size_t icu_strnxfrm_utf8(const CHARSET_INFO *cs [[maybe_unused]],
-//                          uchar *dst [[maybe_unused]],
-//                          size_t dstlen [[maybe_unused]],
-//                          uint num_codepoints [[maybe_unused]],
-//                          const uchar *src [[maybe_unused]],
-//                          size_t srclen [[maybe_unused]],
-//                          uint flags [[maybe_unused]]) {
-//   printf("icu_strnxfrm_utf8 called in ctype-icu.cc\n");
-
-//   // Create a collator for the given locale
-//   static UErrorCode status;
-//   static icu::Collator *collator;
-//   if (collator == nullptr) {
-//     printf("Creating collator in icu_strnxfrm_utf8\n");
-//     status = U_ZERO_ERROR;
-//     icu::Locale locale = icu::Locale(cs->comment);
-//     collator = icu::Collator::createInstance(locale, status);
-//   } else {
-//     printf("Collator already created in icu_strnxfrm_utf8\n");
-//   }
-//   // Create a UnicodeString from the input string
-//   auto sp = icu::StringPiece(reinterpret_cast<const char *>(src), srclen);
-//   auto input = icu::UnicodeString::fromUTF8(sp);
-
-//   // Get sort key
-//   auto sortKey = collator->getSortKey(input, status);
-//   return sortKey;
-// }
-
-// Makes a sort key suitable for memcmp() corresponding to the given string
-// using ICU.
+// Makes a sort key suitable for memcmp() for the given string
 // Equivalent to my_strnxfrm_uca_900_tmpl
 template <class Mb_wc, int LEVELS_FOR_COMPARE>
 static size_t icu_strnxfrm_tmpl(const CHARSET_INFO *cs,
