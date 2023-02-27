@@ -6053,16 +6053,20 @@ MY_COLLATION_HANDLER my_collation_uca_900_handler = {
     my_wildcmp_uca,       my_strcasecmp_uca,      my_instr_mb,
     my_hash_sort_uca_900, my_propagate_uca_900};
 
+const char *CTYPE_UCA = "ctype-uca.cc";
+
 static int wrapper_strnncoll(const CHARSET_INFO *cs, const uchar *s,
                              size_t slen, const uchar *t, size_t tlen,
                              bool t_is_prefix) {
   // return my_strnncoll_uca_900(cs, s, slen, t, tlen, t_is_prefix);
+  log(CTYPE_UCA, "wrapper_strnncoll");
   return icu_strnncoll_utf8(cs, s, slen, t, tlen, t_is_prefix);
 }
 
 static int wrapper_strnncollsp(const CHARSET_INFO *cs, const uchar *s,
                                size_t slen, const uchar *t, size_t tlen) {
   // return my_strnncollsp_uca_900(cs, s, slen, t, tlen);
+  log(CTYPE_UCA, "wrapper_strnncollsp");
   return icu_strnncollsp_utf8(cs, s, slen, t, tlen);
 }
 
@@ -6072,17 +6076,15 @@ static size_t wrapper_strnxfrm(const CHARSET_INFO *cs, uchar *dst,
                                const uchar *src, size_t srclen, uint flags) {
   // return my_strnxfrm_uca_900(cs, dst, dstlen, num_codepoints, src, srclen,
   //                            flags);
+  log(CTYPE_UCA, "wrapper_strnxfrm");
   return icu_strnxfrm(cs, dst, dstlen, num_codepoints, src, srclen, flags);
 }
 
 static size_t wrapper_my_strnxfrmlen_uca_900(const CHARSET_INFO *cs,
                                              size_t len) {
   // TODO: Replace with ICU equivalent
+  log(CTYPE_UCA, "wrapper_my_strnxfrmlen_uca_900");
   auto res = my_strnxfrmlen_uca_900(cs, len);
-  printf(
-      "MY_COLLATION_HANDLER wrapper_my_strnxfrmlen_uca_900 called, with result "
-      "%ld \n",
-      res);
   return res;
   // return my_strnxfrmlen_uca_900(cs, len);
 }
@@ -6093,7 +6095,7 @@ bool wrapper_my_like_range_mb(const CHARSET_INFO *cs, const char *ptr,
                               char *max_str, size_t *min_length,
                               size_t *max_length) {
   // TODO: Replace with ICU equivalent
-  printf("MY_COLLATION_HANDLER wrapper_my_like_range_mb called\n");
+  log(CTYPE_UCA, "wrapper_my_like_range_mb");
   return my_like_range_mb(cs, ptr, ptr_length, escape, w_one, w_many,
                           res_length, min_str, max_str, min_length, max_length);
 }
@@ -6103,7 +6105,7 @@ static int wrapper_my_wildcmp_uca(const CHARSET_INFO *cs, const char *str,
                                   const char *wildend, int escape, int w_one,
                                   int w_many) {
   // TODO: Replace with ICU equivalent
-  printf("MY_COLLATION_HANDLER wrapper_my_wildcmp_uca called\n");
+  log(CTYPE_UCA, "wrapper_my_wildcmp_uca");
   return my_wildcmp_uca(cs, str, str_end, wildstr, wildend, escape, w_one,
                         w_many);
 }
@@ -6111,7 +6113,7 @@ static int wrapper_my_wildcmp_uca(const CHARSET_INFO *cs, const char *str,
 static int wrapper_my_strcasecmp_uca(const CHARSET_INFO *cs, const char *s,
                                      const char *t) {
   // TODO: Replace with ICU equivalent
-  printf("MY_COLLATION_HANDLER wrapper_my_strcasecmp_uca called\n");
+  log(CTYPE_UCA, "wrapper_my_strcasecmp_uca");
   return my_strcasecmp_uca(cs, s, t);
 }
 
@@ -6119,14 +6121,14 @@ uint wrapper_my_instr_mb(const CHARSET_INFO *cs, const char *b, size_t b_length,
                          const char *s, size_t s_length, my_match_t *match,
                          uint nmatch) {
   // TODO: Replace with ICU equivalent
-  printf("MY_COLLATION_HANDLER wrapper_my_instr_mb called\n");
+  log(CTYPE_UCA, "wrapper_my_instr_mb");
   return my_instr_mb(cs, b, b_length, s, s_length, match, nmatch);
 }
 
 static void wrapper_my_hash_sort_uca_900(const CHARSET_INFO *cs, const uchar *s,
                                          size_t slen, uint64 *n1, uint64 *) {
   // TODO: Replace with ICU equivalent
-  printf("MY_COLLATION_HANDLER wrapper_my_hash_sort_uca_900 called\n");
+  log(CTYPE_UCA, "wrapper_my_hash_sort_uca_900");
   my_hash_sort_uca_900(cs, s, slen, n1, nullptr);
 }
 
@@ -6134,7 +6136,7 @@ bool wrapper_my_propagate_uca_900(const CHARSET_INFO *cs,
                                   const uchar *str [[maybe_unused]],
                                   size_t length [[maybe_unused]]) {
   // TODO: Replace with ICU equivalent
-  printf("MY_COLLATION_HANDLER wrapper_my_propagate_uca_900 called\n");
+  log(CTYPE_UCA, "wrapper_my_propagate_uca_900");
   return my_propagate_uca_900(cs, str, length);
 }
 

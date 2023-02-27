@@ -15,12 +15,13 @@
 #include "mb_wc.h"
 #include "unicode/coll.h"
 
+const char *CTYPE_ICU = "ctype-icu.cc";
+void log(const char *file [[maybe_unused]], const char *msg [[maybe_unused]]) {
+  printf("%s: %s \n", file, msg);
+}
+
 // See examples at
 // https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/ustring/ustring.cpp
-
-void log(const char *msg [[maybe_unused]]) {
-  // std::cout << "ctype-icu.cc: " << msg << std::endl;
-}
 
 ///////////////////////////////////////////////////////////////////////////
 // Charset functions
@@ -30,7 +31,7 @@ void log(const char *msg [[maybe_unused]]) {
 // Equivalent to my_caseup_utf8mb4
 size_t icu_caseup(const CHARSET_INFO *cs [[maybe_unused]], char *src,
                   size_t srclen [[maybe_unused]], char *dst, size_t dstlen) {
-  log("icu_caseup");
+  log(CTYPE_ICU, "icu_caseup");
   // TODO: Add collator for locale support
   // TODO: Split this into caseup_str and caseup
 
@@ -51,7 +52,7 @@ size_t icu_caseup(const CHARSET_INFO *cs [[maybe_unused]], char *src,
 // Equivalent to my_casedn_utf8mb4
 size_t icu_casedn(const CHARSET_INFO *cs [[maybe_unused]], char *src,
                   size_t srclen [[maybe_unused]], char *dst, size_t dstlen) {
-  log("icu_casedn");
+  log(CTYPE_ICU, "icu_casedn");
   // TODO: Add collator for locale support
   // TODO: Split this into casedn_str and casedn
 
@@ -76,7 +77,7 @@ size_t icu_casedn(const CHARSET_INFO *cs [[maybe_unused]], char *src,
 int icu_strnncoll_utf8(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
                        size_t slen, const uchar *t, size_t tlen,
                        bool t_is_prefix [[maybe_unused]]) {
-  log("icu_strnncoll_utf8");
+  log(CTYPE_ICU, "icu_strnncoll_utf8");
   return icu_strnncollsp_utf8(cs, s, slen, t, tlen);
 }
 
@@ -84,18 +85,18 @@ int icu_strnncoll_utf8(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
 int icu_strnncollsp_utf8(const CHARSET_INFO *cs [[maybe_unused]],
                          const uchar *s, size_t slen, const uchar *t,
                          size_t tlen) {
-  log("icu_strnncollsp_utf8");
+  log(CTYPE_ICU, "icu_strnncollsp_utf8");
 
   // Create a collator for the given locale
   static UErrorCode status;
   static icu::Collator *collator;
   if (collator == nullptr) {
-    log("Creating collator in icu_strnncollsp_utf8\n");
+    log(CTYPE_ICU, "Creating collator in icu_strnncollsp_utf8\n");
     status = U_ZERO_ERROR;
     icu::Locale locale = icu::Locale(cs->comment);
     collator = icu::Collator::createInstance(locale, status);
   } else {
-    log("Collator already created in icu_strnncollsp_utf8\n");
+    log(CTYPE_ICU, "Collator already created in icu_strnncollsp_utf8\n");
   }
 
   // Create StringPieces from the input strings
@@ -116,7 +117,7 @@ static size_t icu_strnxfrm_tmpl(const CHARSET_INFO *cs,
                                 const Mb_wc mb_wc [[maybe_unused]], uchar *dst,
                                 size_t dstlen, const uchar *src, size_t srclen,
                                 uint flags [[maybe_unused]]) {
-  log("icu_strnxfrm_tmpl");
+  log(CTYPE_ICU, "icu_strnxfrm_tmpl");
 
   UErrorCode status = U_ZERO_ERROR;
   const char *locale_str = cs->comment;
@@ -145,6 +146,7 @@ static size_t icu_strnxfrm_tmpl(const CHARSET_INFO *cs,
   }
 
   // Generate the sort key using the collator
+  // FIXME: Is sending nullptr here correct?
   int32_t sort_key_length = collator->getSortKey(input, nullptr, 0);
   if (dstlen < static_cast<size_t>(sort_key_length)) {
     // Output buffer is too small, return required size
@@ -162,7 +164,7 @@ static size_t icu_strnxfrm_tmpl(const CHARSET_INFO *cs,
 size_t icu_strnxfrm(const CHARSET_INFO *cs, uchar *dst, size_t dstlen,
                     uint num_codepoints [[maybe_unused]], const uchar *src,
                     size_t srclen, uint flags) {
-  log("icu_strnxfrm");
+  log(CTYPE_ICU, "icu_strnxfrm");
   switch (cs->levels_for_compare) {
     case 1:
       return icu_strnxfrm_tmpl<Mb_wc_utf8mb4, 1>(cs, Mb_wc_utf8mb4(), dst,

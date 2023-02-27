@@ -7759,20 +7759,80 @@ MY_CHARSET_HANDLER my_charset_utf8mb4_handler = {nullptr, /* init */
                                                  my_strntoull10rnd_8bit,
                                                  my_scan_8bit};
 
-void log(const char *msg [[maybe_unused]]) {
-  // std::cout << "ctype-utf8.cc: " << msg << std::endl;
+const char *CTYPE_UTF8 = "ctype-utf8.cc";
+
+static uint wrapper_my_ismbchar_utf8mb4(const CHARSET_INFO *cs, const char *b,
+                                        const char *e) {
+  log(CTYPE_UTF8, "wrapper_my_ismbchar_utf8mb4");
+  return my_ismbchar_utf8mb4(cs, b, e);
+}
+
+static uint wrapper_my_mbcharlen_utf8mb4(const CHARSET_INFO *cs, uint c) {
+  log(CTYPE_UTF8, "wrapper_my_mbcharlen_utf8mb4");
+  return my_mbcharlen_utf8mb4(cs, c);
+}
+
+static size_t wrapper_my_numchars_mb(const CHARSET_INFO *cs, const char *b,
+                                     const char *e) {
+  log(CTYPE_UTF8, "wrapper_my_numchars_mb");
+  return my_numchars_mb(cs, b, e);
+}
+
+static size_t wrapper_my_charpos_mb4(const CHARSET_INFO *cs, const char *pos,
+                                     const char *end, size_t length) {
+  log(CTYPE_UTF8, "wrapper_my_charpos_mb4");
+  return my_charpos_mb4(cs, pos, end, length);
+}
+
+static size_t wrapper_my_well_formed_len_utf8mb4(const CHARSET_INFO *cs,
+                                                 const char *b, const char *e,
+                                                 size_t pos, int *error) {
+  log(CTYPE_UTF8, "wrapper_my_well_formed_len_utf8mb4");
+  return my_well_formed_len_utf8mb4(cs, b, e, pos, error);
+}
+
+static size_t wrapper_my_lengthsp_8bit(const CHARSET_INFO *cs, const char *ptr,
+                                       size_t length) {
+  log(CTYPE_UTF8, "wrapper_my_lengthsp_8bit");
+  return my_lengthsp_8bit(cs, ptr, length);
+}
+
+static size_t wrapper_my_numcells_mb(const CHARSET_INFO *cs, const char *b,
+                                     const char *e) {
+  log(CTYPE_UTF8, "wrapper_my_numcells_mb");
+  return my_numcells_mb(cs, b, e);
+}
+
+static int wrapper_my_mb_wc_utf8mb4_thunk(const CHARSET_INFO *cs
+                                          [[maybe_unused]],
+                                          my_wc_t *pwc, const uchar *s,
+                                          const uchar *e) {
+  log(CTYPE_UTF8, "wrapper_my_mb_wc_utf8mb4_thunk");
+  return my_mb_wc_utf8mb4_thunk(cs, pwc, s, e);
+}
+
+static int wrapper_my_wc_mb_utf8mb4(const CHARSET_INFO *cs, my_wc_t wc,
+                                    uchar *r, uchar *e) {
+  log(CTYPE_UTF8, "wrapper_my_wc_mb_utf8mb4");
+  return my_wc_mb_utf8mb4(cs, wc, r, e);
+}
+
+static int wrapper_my_mb_ctype_mb(const CHARSET_INFO *cs, int *ctype,
+                                  const uchar *s, const uchar *e) {
+  log(CTYPE_UTF8, "wrapper_my_mb_ctype_mb");
+  return my_mb_ctype_mb(cs, ctype, s, e);
 }
 
 static size_t wrapper_my_caseup_str_utf8mb4(const CHARSET_INFO *cs, char *src) {
   // TODO: Replace with ICU equivalent
-  log("wrapper_my_caseup_str_utf8mb4");
+  log(CTYPE_UTF8, "wrapper_my_caseup_str_utf8mb4");
   assert(false);
   return my_caseup_str_utf8mb4(cs, src);
 }
 
 static size_t wrapper_my_casedn_str_utf8mb4(const CHARSET_INFO *cs, char *src) {
   // TODO: Replace with ICU equivalent
-  log("wrapper_my_casedn_str_utf8mb4");
+  log(CTYPE_UTF8, "wrapper_my_casedn_str_utf8mb4");
   assert(false);
   return my_caseup_str_utf8mb4(cs, src);
 }
@@ -7780,7 +7840,7 @@ static size_t wrapper_my_casedn_str_utf8mb4(const CHARSET_INFO *cs, char *src) {
 static size_t wrapper_my_caseup_utf8mb4(const CHARSET_INFO *cs, char *src,
                                         size_t srclen, char *dst,
                                         size_t dstlen) {
-  log("wrapper_my_caseup_utf8mb4");
+  log(CTYPE_UTF8, "wrapper_my_caseup_utf8mb4");
   return icu_caseup(cs, src, srclen, dst, dstlen);
   // return my_caseup_utf8mb4(cs, src, srclen, dst, dstlen);
 }
@@ -7788,23 +7848,23 @@ static size_t wrapper_my_caseup_utf8mb4(const CHARSET_INFO *cs, char *src,
 static size_t wrapper_my_casedn_utf8mb4(const CHARSET_INFO *cs, char *src,
                                         size_t srclen, char *dst,
                                         size_t dstlen) {
-  log("wrapper_my_casedn_utf8mb4");
+  log(CTYPE_UTF8, "wrapper_my_casedn_utf8mb4");
   return icu_casedn(cs, src, srclen, dst, dstlen);
   // return my_casedn_utf8mb4(cs, src, srclen, dst, dstlen);
 }
 
 MY_CHARSET_HANDLER my_charset_icu_handler = {
-    nullptr,                     /* init */
-    my_ismbchar_utf8mb4,         // Replace with wrapper
-    my_mbcharlen_utf8mb4,        // Replace with wrapper
-    my_numchars_mb,              // Replace with wrapper
-    my_charpos_mb4,              // Replace with wrapper
-    my_well_formed_len_utf8mb4,  // Replace with wrapper
-    my_lengthsp_8bit,            // Replace with wrapper
-    my_numcells_mb,              // Replace with wrapper
-    my_mb_wc_utf8mb4_thunk,      // Replace with wrapper
-    my_wc_mb_utf8mb4,            // Replace with wrapper
-    my_mb_ctype_mb,              // Replace with wrapper
+    nullptr, /* init */
+    wrapper_my_ismbchar_utf8mb4,
+    wrapper_my_mbcharlen_utf8mb4,
+    wrapper_my_numchars_mb,
+    wrapper_my_charpos_mb4,
+    wrapper_my_well_formed_len_utf8mb4,
+    wrapper_my_lengthsp_8bit,
+    wrapper_my_numcells_mb,
+    wrapper_my_mb_wc_utf8mb4_thunk,
+    wrapper_my_wc_mb_utf8mb4,
+    wrapper_my_mb_ctype_mb,
     wrapper_my_caseup_str_utf8mb4,
     wrapper_my_casedn_str_utf8mb4,
     wrapper_my_caseup_utf8mb4,

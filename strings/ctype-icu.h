@@ -2,6 +2,9 @@
 #define CTYPE_ICU_H
 #include <m_ctype.h>
 
+// Temp util methods
+void log(const char *file, const char *msg);
+
 // Charset functions
 size_t icu_caseup(const CHARSET_INFO *cs, char *src, size_t srclen, char *dst,
                   size_t dstlen);
