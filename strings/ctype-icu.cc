@@ -91,13 +91,29 @@ int icu_strnncollsp_utf8(const CHARSET_INFO *cs [[maybe_unused]],
   static UErrorCode status;
   static icu::Collator *collator;
   if (collator == nullptr) {
-    log(CTYPE_ICU_FILENAME, "Creating collator in icu_strnncollsp_utf8\n");
+    log(CTYPE_ICU_FILENAME, "Creating collator in icu_strnncollsp_utf8");
     status = U_ZERO_ERROR;
     icu::Locale locale = icu::Locale(cs->comment);
     collator = icu::Collator::createInstance(locale, status);
+
+    // Set comparison level
+    switch (cs->levels_for_compare) {
+      case 1:
+        collator->setStrength(icu::Collator::PRIMARY);
+        break;
+      case 2:
+        collator->setStrength(icu::Collator::SECONDARY);
+        break;
+      case 3:
+        collator->setStrength(icu::Collator::TERTIARY);
+        break;
+      default:
+        collator->setStrength(icu::Collator::IDENTICAL);
+        break;
+    }
+
   } else {
-    log(CTYPE_ICU_FILENAME,
-        "Collator already created in icu_strnncollsp_utf8\n");
+    log(CTYPE_ICU_FILENAME, "Collator already created in icu_strnncollsp_utf8");
   }
 
   // Create StringPieces from the input strings
