@@ -7769,6 +7769,7 @@ static uint wrapper_my_ismbchar_utf8mb4(const CHARSET_INFO *cs, const char *b,
 
 static uint wrapper_my_mbcharlen_utf8mb4(const CHARSET_INFO *cs, uint c) {
   log(CTYPE_UTF8, "wrapper_my_mbcharlen_utf8mb4");
+  // Note: This is called many times on startup
   return my_mbcharlen_utf8mb4(cs, c);
 }
 
@@ -7840,7 +7841,6 @@ static size_t wrapper_my_casedn_str_utf8mb4(const CHARSET_INFO *cs, char *src) {
 static size_t wrapper_my_caseup_utf8mb4(const CHARSET_INFO *cs, char *src,
                                         size_t srclen, char *dst,
                                         size_t dstlen) {
-  log(CTYPE_UTF8, "wrapper_my_caseup_utf8mb4");
   return icu_caseup(cs, src, srclen, dst, dstlen);
   // return my_caseup_utf8mb4(cs, src, srclen, dst, dstlen);
 }
@@ -7848,7 +7848,6 @@ static size_t wrapper_my_caseup_utf8mb4(const CHARSET_INFO *cs, char *src,
 static size_t wrapper_my_casedn_utf8mb4(const CHARSET_INFO *cs, char *src,
                                         size_t srclen, char *dst,
                                         size_t dstlen) {
-  log(CTYPE_UTF8, "wrapper_my_casedn_utf8mb4");
   return icu_casedn(cs, src, srclen, dst, dstlen);
   // return my_casedn_utf8mb4(cs, src, srclen, dst, dstlen);
 }
