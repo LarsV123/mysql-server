@@ -15,8 +15,8 @@ size_t icu_casedn(const CHARSET_INFO *cs, char *src, size_t srclen, char *dst,
 int icu_strnncoll_utf8(const CHARSET_INFO *cs, const uchar *s, size_t slen,
                        const uchar *t, size_t tlen, bool t_is_prefix);
 
-int icu_strnncollsp_utf8(const CHARSET_INFO *cs, const uchar *s, size_t slen,
-                         const uchar *t, size_t tlen);
+int icu_strnncollsp(const CHARSET_INFO *cs, const uchar *s, size_t slen,
+                    const uchar *t, size_t tlen);
 
 // This creates sort keys for the given string
 template <class Mb_wc, int LEVELS_FOR_COMPARE>

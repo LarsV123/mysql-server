@@ -6067,7 +6067,7 @@ static int wrapper_strnncollsp(const CHARSET_INFO *cs, const uchar *s,
                                size_t slen, const uchar *t, size_t tlen) {
   // return my_strnncollsp_uca_900(cs, s, slen, t, tlen);
   log(CTYPE_UCA_FILENAME, "wrapper_strnncollsp");
-  return icu_strnncollsp_utf8(cs, s, slen, t, tlen);
+  return icu_strnncollsp(cs, s, slen, t, tlen);
 }
 
 static size_t wrapper_strnxfrm(const CHARSET_INFO *cs, uchar *dst,

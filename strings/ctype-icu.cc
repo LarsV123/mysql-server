@@ -78,20 +78,19 @@ int icu_strnncoll_utf8(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
                        size_t slen, const uchar *t, size_t tlen,
                        bool t_is_prefix [[maybe_unused]]) {
   log(CTYPE_ICU_FILENAME, "icu_strnncoll_utf8");
-  return icu_strnncollsp_utf8(cs, s, slen, t, tlen);
+  return icu_strnncollsp(cs, s, slen, t, tlen);
 }
 
 // strnncollsp - compares two strings (ignoring trailing spaces)
-int icu_strnncollsp_utf8(const CHARSET_INFO *cs [[maybe_unused]],
-                         const uchar *s, size_t slen, const uchar *t,
-                         size_t tlen) {
-  log(CTYPE_ICU_FILENAME, "icu_strnncollsp_utf8");
+int icu_strnncollsp(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
+                    size_t slen, const uchar *t, size_t tlen) {
+  log(CTYPE_ICU_FILENAME, "icu_strnncollsp");
 
   // Create a collator for the given locale
   static UErrorCode status;
   static icu::Collator *collator;
   if (collator == nullptr) {
-    log(CTYPE_ICU_FILENAME, "Creating collator in icu_strnncollsp_utf8");
+    log(CTYPE_ICU_FILENAME, "Creating collator in icu_strnncollsp");
     status = U_ZERO_ERROR;
     icu::Locale locale = icu::Locale(cs->comment);
     collator = icu::Collator::createInstance(locale, status);
@@ -113,7 +112,7 @@ int icu_strnncollsp_utf8(const CHARSET_INFO *cs [[maybe_unused]],
     }
 
   } else {
-    log(CTYPE_ICU_FILENAME, "Collator already created in icu_strnncollsp_utf8");
+    log(CTYPE_ICU_FILENAME, "Collator already created in icu_strnncollsp");
   }
 
   // Create StringPieces from the input strings
