@@ -3,21 +3,43 @@
 #include <cstring>
 #include <iostream>
 
-#include <unicode/errorcode.h>
-#include <unicode/regex.h>
-#include <unicode/uchar.h>
-#include <unicode/ucol.h>
-#include <unicode/unistr.h>
-#include <unicode/unorm2.h>
-#include <unicode/usearch.h>
-#include <unicode/ustring.h>
-#include <unicode/utypes.h>
 #include "mb_wc.h"
-#include "unicode/coll.h"
 
 const char *CTYPE_ICU_FILENAME = "ctype-icu.cc";
 void log(const char *file [[maybe_unused]], const char *msg [[maybe_unused]]) {
-  printf("%s: %s \n", file, msg);
+  // printf("%s: %s \n", file, msg);
+}
+
+thread_local ICU_COLLATOR *COLL_STRUCT = nullptr;
+
+ICU_COLLATOR *get_collator(const CHARSET_INFO *cs) {
+  log(CTYPE_ICU_FILENAME, "get_collator");
+  if (COLL_STRUCT == nullptr) {
+    log(CTYPE_ICU_FILENAME, "Creating new collator");
+    COLL_STRUCT = new ICU_COLLATOR();
+    icu::Locale locale = icu::Locale(cs->comment);
+    UErrorCode status = U_ZERO_ERROR;
+    icu::Collator *collator = icu::Collator::createInstance(locale, status);
+
+    // Set comparison level
+    switch (cs->levels_for_compare) {
+      case 1:
+        collator->setStrength(icu::Collator::PRIMARY);
+        break;
+      case 2:
+        collator->setStrength(icu::Collator::SECONDARY);
+        break;
+      case 3:
+        collator->setStrength(icu::Collator::TERTIARY);
+        break;
+      default:
+        collator->setStrength(icu::Collator::IDENTICAL);
+        break;
+    }
+    COLL_STRUCT->status = status;
+    COLL_STRUCT->collator = collator;
+  }
+  return COLL_STRUCT;
 }
 
 // See examples at
@@ -86,34 +108,10 @@ int icu_strnncollsp(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
                     size_t slen, const uchar *t, size_t tlen) {
   log(CTYPE_ICU_FILENAME, "icu_strnncollsp");
 
-  // Create a collator for the given locale
-  static UErrorCode status;
-  static icu::Collator *collator;
-  if (collator == nullptr) {
-    log(CTYPE_ICU_FILENAME, "Creating collator in icu_strnncollsp");
-    status = U_ZERO_ERROR;
-    icu::Locale locale = icu::Locale(cs->comment);
-    collator = icu::Collator::createInstance(locale, status);
-
-    // Set comparison level
-    switch (cs->levels_for_compare) {
-      case 1:
-        collator->setStrength(icu::Collator::PRIMARY);
-        break;
-      case 2:
-        collator->setStrength(icu::Collator::SECONDARY);
-        break;
-      case 3:
-        collator->setStrength(icu::Collator::TERTIARY);
-        break;
-      default:
-        collator->setStrength(icu::Collator::IDENTICAL);
-        break;
-    }
-
-  } else {
-    log(CTYPE_ICU_FILENAME, "Collator already created in icu_strnncollsp");
-  }
+  // Get a collator for this locale
+  auto collator_struct = get_collator(cs);
+  auto collator = collator_struct->collator;
+  auto status = collator_struct->status;
 
   // Create StringPieces from the input strings
   icu::StringPiece sp1 =
@@ -135,43 +133,21 @@ static size_t icu_strnxfrm_tmpl(const CHARSET_INFO *cs,
                                 uint flags [[maybe_unused]]) {
   log(CTYPE_ICU_FILENAME, "icu_strnxfrm_tmpl");
 
-  UErrorCode status = U_ZERO_ERROR;
-  const char *locale_str = cs->comment;
-  icu::Locale locale(locale_str);
-
   auto sp = icu::StringPiece(reinterpret_cast<const char *>(src), srclen);
   auto input = icu::UnicodeString::fromUTF8(sp);
 
-  // Create a collator for the given locale
-  icu::Collator *collator = icu::Collator::createInstance(locale, status);
-
-  // Set the collation strength based on the number of levels for comparison
-  switch (LEVELS_FOR_COMPARE) {
-    case 1:
-      collator->setStrength(icu::Collator::PRIMARY);
-      break;
-    case 2:
-      collator->setStrength(icu::Collator::SECONDARY);
-      break;
-    case 3:
-      collator->setStrength(icu::Collator::TERTIARY);
-      break;
-    default:
-      collator->setStrength(icu::Collator::IDENTICAL);
-      break;
-  }
+  // Get a collator for this locale
+  auto collator = get_collator(cs)->collator;
 
   // Generate the sort key using the collator
   // FIXME: Is sending nullptr here correct?
   int32_t sort_key_length = collator->getSortKey(input, nullptr, 0);
   if (dstlen < static_cast<size_t>(sort_key_length)) {
     // Output buffer is too small, return required size
-    delete collator;
     return sort_key_length;
   }
   collator->getSortKey(input, reinterpret_cast<uint8_t *>(dst),
                        sort_key_length);
-  delete collator;
 
   return static_cast<size_t>(sort_key_length);
 }

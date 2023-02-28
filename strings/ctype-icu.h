@@ -1,9 +1,26 @@
 #ifndef CTYPE_ICU_H
 #define CTYPE_ICU_H
 #include <m_ctype.h>
+#include <unicode/errorcode.h>
+#include <unicode/regex.h>
+#include <unicode/uchar.h>
+#include <unicode/ucol.h>
+#include <unicode/unistr.h>
+#include <unicode/unorm2.h>
+#include <unicode/usearch.h>
+#include <unicode/ustring.h>
+#include <unicode/utypes.h>
+#include "unicode/coll.h"
 
 // Temp util methods
 void log(const char *file, const char *msg);
+
+// Thread local collator objects
+struct ICU_COLLATOR {
+  icu::Collator *collator{};
+  UErrorCode status{};
+};
+ICU_COLLATOR *get_collator(const CHARSET_INFO *cs);
 
 // Charset functions
 size_t icu_caseup(const CHARSET_INFO *cs, char *src, size_t srclen, char *dst,
