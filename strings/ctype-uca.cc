@@ -6140,9 +6140,20 @@ bool wrapper_my_propagate_uca_900(const CHARSET_INFO *cs,
   return my_propagate_uca_900(cs, str, length);
 }
 
+static bool wrapper_my_coll_init_uca(CHARSET_INFO *cs,
+                                     MY_CHARSET_LOADER *loader) {
+  log(CTYPE_UCA_FILENAME, "wrapper_my_coll_init_uca");
+  return my_coll_init_uca(cs, loader);
+}
+
+static void wrapper_my_coll_uninit_uca(CHARSET_INFO *cs) {
+  log(CTYPE_UCA_FILENAME, "wrapper_my_coll_uninit_uca");
+  my_coll_uninit_uca(cs);
+}
+
 MY_COLLATION_HANDLER my_collation_icu_handler = {
-    my_coll_init_uca,    // TODO: Replace with ICU equivalent
-    my_coll_uninit_uca,  // TODO: Replace with ICU equivalent
+    wrapper_my_coll_init_uca,   
+    wrapper_my_coll_uninit_uca,
     wrapper_strnncoll,
     wrapper_strnncollsp,
     wrapper_strnxfrm,
