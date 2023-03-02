@@ -17,8 +17,7 @@ thread_local ICU_COLLATOR *COLL_STRUCT = nullptr;
 thread_local std::map<const char *, ICU_COLLATOR *> COLL_MAP =
     std::map<const char *, ICU_COLLATOR *>();
 
-bool icu_coll_init(CHARSET_INFO *cs [[maybe_unused]],
-                   MY_CHARSET_LOADER *loader [[maybe_unused]]) {
+bool icu_coll_init(const CHARSET_INFO *cs) {
   // TODO: Implement tailoring
 
   log(CTYPE_ICU_FILENAME, "Creating new collator");
@@ -59,7 +58,7 @@ ICU_COLLATOR *get_collator(const CHARSET_INFO *cs) {
     log(CTYPE_ICU_FILENAME, "Collator already exists");
     COLL_STRUCT = COLL_MAP[cs->csname];
   } else {
-    assert(false);
+    icu_coll_init(cs);
   }
   return COLL_STRUCT;
 }

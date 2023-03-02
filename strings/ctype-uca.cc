@@ -6148,7 +6148,6 @@ bool wrapper_my_propagate_uca_900(const CHARSET_INFO *cs,
 static bool wrapper_my_coll_init_uca(CHARSET_INFO *cs,
                                      MY_CHARSET_LOADER *loader) {
   log(CTYPE_UCA_FILENAME, "wrapper_my_coll_init_uca");
-  icu_coll_init(cs, loader);
 
   // This sets some charset metadata we need, so it's easier to do it here
   // instead of in the icu_coll_init() function.
