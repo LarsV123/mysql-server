@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <cstring>
 #include <iostream>
+#include <map>
 
 #include "mb_wc.h"
 
@@ -11,10 +12,17 @@ void log(const char *file [[maybe_unused]], const char *msg [[maybe_unused]]) {
 }
 
 thread_local ICU_COLLATOR *COLL_STRUCT = nullptr;
+thread_local std::map<const char *, ICU_COLLATOR *> COLL_MAP =
+    std::map<const char *, ICU_COLLATOR *>();
 
 ICU_COLLATOR *get_collator(const CHARSET_INFO *cs) {
   log(CTYPE_ICU_FILENAME, "get_collator");
-  if (COLL_STRUCT == nullptr) {
+
+  // Check if the collator is already in the map
+  if (COLL_MAP.find(cs->csname) != COLL_MAP.end()) {
+    log(CTYPE_ICU_FILENAME, "Collator already exists");
+    COLL_STRUCT = COLL_MAP[cs->csname];
+  } else {
     log(CTYPE_ICU_FILENAME, "Creating new collator");
     COLL_STRUCT = new ICU_COLLATOR();
     icu::Locale locale = icu::Locale(cs->comment);
@@ -38,6 +46,7 @@ ICU_COLLATOR *get_collator(const CHARSET_INFO *cs) {
     }
     COLL_STRUCT->status = status;
     COLL_STRUCT->collator = collator;
+    COLL_MAP[cs->csname] = COLL_STRUCT;
   }
   return COLL_STRUCT;
 }
