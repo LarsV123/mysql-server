@@ -14,6 +14,7 @@
 
 // Temp util methods
 void log(const char *file, const char *msg);
+const bool ICU_DEBUG = true;
 
 // Thread local collator objects
 struct ICU_COLLATOR {
@@ -21,6 +22,10 @@ struct ICU_COLLATOR {
   UErrorCode status{};
 };
 ICU_COLLATOR *get_collator(const CHARSET_INFO *cs);
+
+// Init and unload functions
+bool icu_coll_init(CHARSET_INFO *cs, MY_CHARSET_LOADER *loader);
+void icu_coll_uninit(CHARSET_INFO *cs);
 
 // Charset functions
 size_t icu_caseup(const CHARSET_INFO *cs, char *src, size_t srclen, char *dst,
@@ -45,4 +50,5 @@ size_t icu_strnxfrm_tmpl(const CHARSET_INFO *cs, const Mb_wc mb_wc, uchar *dst,
 size_t icu_strnxfrm(const CHARSET_INFO *cs, uchar *dst, size_t dstlen,
                     uint num_codepoints, const uchar *src, size_t srclen,
                     uint flags);
+
 #endif  // CTYPE_ICU_H

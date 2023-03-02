@@ -6084,9 +6084,8 @@ static size_t wrapper_my_strnxfrmlen_uca_900(const CHARSET_INFO *cs,
                                              size_t len) {
   // TODO: Replace with ICU equivalent
   log(CTYPE_UCA_FILENAME, "wrapper_my_strnxfrmlen_uca_900");
-  auto res = my_strnxfrmlen_uca_900(cs, len);
-  return res;
-  // return my_strnxfrmlen_uca_900(cs, len);
+  assert(ICU_DEBUG);
+  return my_strnxfrmlen_uca_900(cs, len);
 }
 
 bool wrapper_my_like_range_mb(const CHARSET_INFO *cs, const char *ptr,
@@ -6096,6 +6095,7 @@ bool wrapper_my_like_range_mb(const CHARSET_INFO *cs, const char *ptr,
                               size_t *max_length) {
   // TODO: Replace with ICU equivalent
   log(CTYPE_UCA_FILENAME, "wrapper_my_like_range_mb");
+  assert(ICU_DEBUG);
   return my_like_range_mb(cs, ptr, ptr_length, escape, w_one, w_many,
                           res_length, min_str, max_str, min_length, max_length);
 }
@@ -6106,6 +6106,7 @@ static int wrapper_my_wildcmp_uca(const CHARSET_INFO *cs, const char *str,
                                   int w_many) {
   // TODO: Replace with ICU equivalent
   log(CTYPE_UCA_FILENAME, "wrapper_my_wildcmp_uca");
+  assert(ICU_DEBUG);
   return my_wildcmp_uca(cs, str, str_end, wildstr, wildend, escape, w_one,
                         w_many);
 }
@@ -6114,6 +6115,7 @@ static int wrapper_my_strcasecmp_uca(const CHARSET_INFO *cs, const char *s,
                                      const char *t) {
   // TODO: Replace with ICU equivalent
   log(CTYPE_UCA_FILENAME, "wrapper_my_strcasecmp_uca");
+  assert(ICU_DEBUG);
   return my_strcasecmp_uca(cs, s, t);
 }
 
@@ -6122,6 +6124,7 @@ uint wrapper_my_instr_mb(const CHARSET_INFO *cs, const char *b, size_t b_length,
                          uint nmatch) {
   // TODO: Replace with ICU equivalent
   log(CTYPE_UCA_FILENAME, "wrapper_my_instr_mb");
+  assert(ICU_DEBUG);
   return my_instr_mb(cs, b, b_length, s, s_length, match, nmatch);
 }
 
@@ -6129,6 +6132,7 @@ static void wrapper_my_hash_sort_uca_900(const CHARSET_INFO *cs, const uchar *s,
                                          size_t slen, uint64 *n1, uint64 *) {
   // TODO: Replace with ICU equivalent
   log(CTYPE_UCA_FILENAME, "wrapper_my_hash_sort_uca_900");
+  assert(ICU_DEBUG);
   my_hash_sort_uca_900(cs, s, slen, n1, nullptr);
 }
 
@@ -6137,18 +6141,24 @@ bool wrapper_my_propagate_uca_900(const CHARSET_INFO *cs,
                                   size_t length [[maybe_unused]]) {
   // TODO: Replace with ICU equivalent
   log(CTYPE_UCA_FILENAME, "wrapper_my_propagate_uca_900");
+  assert(ICU_DEBUG);
   return my_propagate_uca_900(cs, str, length);
 }
 
 static bool wrapper_my_coll_init_uca(CHARSET_INFO *cs,
                                      MY_CHARSET_LOADER *loader) {
   log(CTYPE_UCA_FILENAME, "wrapper_my_coll_init_uca");
+  icu_coll_init(cs, loader);
+
+  // This sets some charset metadata we need, so it's easier to do it here
+  // instead of in the icu_coll_init() function.
   return my_coll_init_uca(cs, loader);
 }
 
 static void wrapper_my_coll_uninit_uca(CHARSET_INFO *cs) {
   log(CTYPE_UCA_FILENAME, "wrapper_my_coll_uninit_uca");
   my_coll_uninit_uca(cs);
+  // icu_coll_uninit(cs);
 }
 
 MY_COLLATION_HANDLER icu_collation_handler = {
