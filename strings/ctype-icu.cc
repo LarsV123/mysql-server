@@ -23,6 +23,11 @@ bool icu_coll_init(const CHARSET_INFO *cs) {
   log(CTYPE_ICU_FILENAME, "Creating new collator");
   COLL_STRUCT = new ICU_COLLATOR();
   icu::Locale locale = icu::Locale(cs->comment);
+
+  if (ICU_DEBUG) {
+    printf("  Locale: %s\n", locale.getName());
+  }
+
   UErrorCode status = U_ZERO_ERROR;
   icu::Collator *collator = icu::Collator::createInstance(locale, status);
 
@@ -43,7 +48,7 @@ bool icu_coll_init(const CHARSET_INFO *cs) {
   }
   COLL_STRUCT->status = status;
   COLL_STRUCT->collator = collator;
-  COLL_MAP[cs->csname] = COLL_STRUCT;
+  COLL_MAP[cs->comment] = COLL_STRUCT;
   return true;
 }
 void icu_coll_uninit(CHARSET_INFO *cs [[maybe_unused]]){
@@ -54,9 +59,9 @@ ICU_COLLATOR *get_collator(const CHARSET_INFO *cs) {
   log(CTYPE_ICU_FILENAME, "get_collator");
 
   // Check if the collator is already in the map
-  if (COLL_MAP.find(cs->csname) != COLL_MAP.end()) {
+  if (COLL_MAP.find(cs->comment) != COLL_MAP.end()) {
     log(CTYPE_ICU_FILENAME, "Collator already exists");
-    COLL_STRUCT = COLL_MAP[cs->csname];
+    COLL_STRUCT = COLL_MAP[cs->comment];
   } else {
     icu_coll_init(cs);
   }

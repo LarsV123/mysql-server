@@ -12116,3 +12116,38 @@ CHARSET_INFO icu_charset_utf8mb4_nb_ai_ci = {
     &icu_charset_handler,
     &icu_collation_handler,
     NO_PAD};
+
+CHARSET_INFO icu_charset_utf8mb4_us_ai_ci = {
+    325,
+    0,
+    0,                          /* number       */
+    MY_CS_UTF8MB4_UCA_FLAGS,    /* state    */
+    MY_UTF8MB4,                 /* csname       */
+    MY_UTF8MB4 "_us_icu_ai_ci", /* m_coll_name  */
+    "en_US",                    /* comment      */
+    nullptr,                    /* tailoring    */
+    nullptr,                    /* coll_param   */
+    ctype_utf8,                 /* ctype        */
+    nullptr,                    /* to_lower     */
+    nullptr,                    /* to_upper     */
+    nullptr,                    /* sort_order   */
+    &my_uca_v900,               /* uca_900      */
+    nullptr,                    /* tab_to_uni   */
+    nullptr,                    /* tab_from_uni */
+    &my_unicase_unicode900,     /* caseinfo     */
+    nullptr,                    /* state_map    */
+    nullptr,                    /* ident_map    */
+    0,                          /* strxfrm_multiply */
+    1,                          /* caseup_multiply  */
+    1,                          /* casedn_multiply  */
+    1,                          /* mbminlen      */
+    4,                          /* mbmaxlen      */
+    1,                          /* mbmaxlenlen   */
+    9,                          /* min_sort_char */
+    0x10FFFF,                   /* max_sort_char */
+    ' ',                        /* pad char      */
+    false,                      /* escape_with_backslash_is_dangerous */
+    1,                          /* levels_for_compare */
+    &icu_charset_handler,
+    &icu_collation_handler,
+    NO_PAD};
