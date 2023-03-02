@@ -6151,8 +6151,8 @@ static void wrapper_my_coll_uninit_uca(CHARSET_INFO *cs) {
   my_coll_uninit_uca(cs);
 }
 
-MY_COLLATION_HANDLER my_collation_icu_handler = {
-    wrapper_my_coll_init_uca,   
+MY_COLLATION_HANDLER icu_collation_handler = {
+    wrapper_my_coll_init_uca,
     wrapper_my_coll_uninit_uca,
     wrapper_strnncoll,
     wrapper_strnncollsp,
@@ -6163,7 +6163,8 @@ MY_COLLATION_HANDLER my_collation_icu_handler = {
     wrapper_my_strcasecmp_uca,
     wrapper_my_instr_mb,
     wrapper_my_hash_sort_uca_900,
-    wrapper_my_propagate_uca_900};
+    wrapper_my_propagate_uca_900,
+};
 
 /*
   We consider bytes with code more than 127 as a letter.
@@ -7036,7 +7037,7 @@ CHARSET_INFO my_charset_utf8mb3_vietnamese_ci = {
     PAD_SPACE};
 
 extern MY_CHARSET_HANDLER my_charset_utf8mb4_handler;
-extern MY_CHARSET_HANDLER my_charset_icu_handler;
+extern MY_CHARSET_HANDLER icu_charset_handler;
 
 #define MY_CS_UTF8MB4_UCA_FLAGS \
   (MY_CS_COMPILED | MY_CS_STRNXFRM | MY_CS_UNICODE | MY_CS_UNICODE_SUPPLEMENT)
@@ -12103,6 +12104,6 @@ CHARSET_INFO icu_charset_utf8mb4_nb_ai_ci = {
     ' ',                        /* pad char      */
     false,                      /* escape_with_backslash_is_dangerous */
     1,                          /* levels_for_compare */
-    &my_charset_icu_handler,
-    &my_collation_icu_handler,
+    &icu_charset_handler,
+    &icu_collation_handler,
     NO_PAD};

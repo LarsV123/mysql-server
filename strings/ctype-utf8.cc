@@ -7852,7 +7852,7 @@ static size_t wrapper_my_casedn_utf8mb4(const CHARSET_INFO *cs, char *src,
   // return my_casedn_utf8mb4(cs, src, srclen, dst, dstlen);
 }
 
-MY_CHARSET_HANDLER my_charset_icu_handler = {
+MY_CHARSET_HANDLER icu_charset_handler = {
     nullptr, /* init */
     wrapper_my_ismbchar_utf8mb4,
     wrapper_my_mbcharlen_utf8mb4,
