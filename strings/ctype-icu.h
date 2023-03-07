@@ -14,7 +14,8 @@
 
 // Temp util methods
 void log(const char *file, const char *msg);
-const bool ICU_DEBUG = true;
+// const bool ICU_DEBUG = true;
+const bool ICU_DEBUG = false;
 
 // Thread local collator objects
 struct ICU_COLLATOR {

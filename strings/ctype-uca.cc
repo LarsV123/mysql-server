@@ -6082,9 +6082,9 @@ static size_t wrapper_strnxfrm(const CHARSET_INFO *cs, uchar *dst,
 
 static size_t wrapper_my_strnxfrmlen_uca_900(const CHARSET_INFO *cs,
                                              size_t len) {
-  // TODO: Replace with ICU equivalent
+  // TODO: Replace with ICU equivalent (this is actually used)
   log(CTYPE_UCA_FILENAME, "wrapper_my_strnxfrmlen_uca_900");
-  assert(ICU_DEBUG);
+  // assert(ICU_DEBUG);
   return my_strnxfrmlen_uca_900(cs, len);
 }
 
@@ -6139,9 +6139,9 @@ static void wrapper_my_hash_sort_uca_900(const CHARSET_INFO *cs, const uchar *s,
 bool wrapper_my_propagate_uca_900(const CHARSET_INFO *cs,
                                   const uchar *str [[maybe_unused]],
                                   size_t length [[maybe_unused]]) {
-  // TODO: Replace with ICU equivalent
+  // TODO: Replace with ICU equivalent (this is actually used)
   log(CTYPE_UCA_FILENAME, "wrapper_my_propagate_uca_900");
-  assert(ICU_DEBUG);
+  // assert(ICU_DEBUG);
   return my_propagate_uca_900(cs, str, length);
 }
 
