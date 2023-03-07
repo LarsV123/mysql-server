@@ -165,17 +165,16 @@ static size_t icu_strnxfrm_tmpl(const CHARSET_INFO *cs,
   // Get a collator for this locale
   auto collator = get_collator(cs)->collator;
 
-  // Generate the sort key using the collator
-  // FIXME: Is sending nullptr here correct?
-  int32_t sort_key_length = collator->getSortKey(input, nullptr, 0);
-  if (dstlen < static_cast<size_t>(sort_key_length)) {
-    // Output buffer is too small, return required size
-    return sort_key_length;
-  }
-  collator->getSortKey(input, reinterpret_cast<uint8_t *>(dst),
-                       sort_key_length);
+  // Generate a sort key and the length of the required buffer
+  size_t expectedLen = collator->getSortKey(input, dst, dstlen);
 
-  return static_cast<size_t>(sort_key_length);
+  assert(expectedLen <= dstlen);
+  if (expectedLen > dstlen) {
+    // Output buffer is too small
+    log(CTYPE_ICU_FILENAME, "icu_strnxfrm_tmpl: output buffer too small");
+  }
+
+  return expectedLen;
 }
 
 // Equivalent to my_strnxfrm_uca_900
