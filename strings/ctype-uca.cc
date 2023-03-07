@@ -12082,6 +12082,7 @@ CHARSET_INFO my_charset_utf8mb4_mn_cyrl_0900_as_cs = {
     &my_collation_uca_900_handler,
     NO_PAD};
 
+// Should be equivalent to utf8mb4_nb_0900_ai_ci
 CHARSET_INFO icu_charset_utf8mb4_nb_ai_ci = {
     324,
     0,
@@ -12117,6 +12118,7 @@ CHARSET_INFO icu_charset_utf8mb4_nb_ai_ci = {
     &icu_collation_handler,
     NO_PAD};
 
+// Should be equivalent to my_charset_utf8mb4_0900_ai_ci
 CHARSET_INFO icu_charset_utf8mb4_us_ai_ci = {
     325,
     0,
