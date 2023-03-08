@@ -14,8 +14,8 @@ void log(const char *file [[maybe_unused]], const char *msg [[maybe_unused]]) {
 }
 
 thread_local ICU_COLLATOR *COLL_STRUCT = nullptr;
-thread_local std::map<const char *, ICU_COLLATOR *> COLL_MAP =
-    std::map<const char *, ICU_COLLATOR *>();
+thread_local std::unordered_map<const char *, ICU_COLLATOR *> COLL_MAP =
+    std::unordered_map<const char *, ICU_COLLATOR *>();
 
 bool icu_coll_init(const CHARSET_INFO *cs) {
   // TODO: Implement tailoring
