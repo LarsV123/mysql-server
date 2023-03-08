@@ -14,8 +14,8 @@ void log(const char *file [[maybe_unused]], const char *msg [[maybe_unused]]) {
 }
 
 thread_local ICU_COLLATOR *COLL_STRUCT = nullptr;
-thread_local std::unordered_map<const char *, ICU_COLLATOR *> COLL_MAP =
-    std::unordered_map<const char *, ICU_COLLATOR *>();
+thread_local std::unordered_map<uint, ICU_COLLATOR *> COLL_MAP =
+    std::unordered_map<uint, ICU_COLLATOR *>();
 
 bool icu_coll_init(const CHARSET_INFO *cs) {
   // TODO: Implement tailoring
@@ -48,7 +48,7 @@ bool icu_coll_init(const CHARSET_INFO *cs) {
   }
   COLL_STRUCT->status = status;
   COLL_STRUCT->collator = collator;
-  COLL_MAP[cs->comment] = COLL_STRUCT;
+  COLL_MAP[cs->number] = COLL_STRUCT;
   return true;
 }
 void icu_coll_uninit(CHARSET_INFO *cs [[maybe_unused]]){
@@ -59,9 +59,9 @@ ICU_COLLATOR *get_collator(const CHARSET_INFO *cs) {
   log(CTYPE_ICU_FILENAME, "get_collator");
 
   // Check if the collator is already in the map
-  if (COLL_MAP.find(cs->comment) != COLL_MAP.end()) {
+  if (COLL_MAP.find(cs->number) != COLL_MAP.end()) {
     log(CTYPE_ICU_FILENAME, "Collator already exists");
-    COLL_STRUCT = COLL_MAP[cs->comment];
+    COLL_STRUCT = COLL_MAP[cs->number];
   } else {
     icu_coll_init(cs);
   }
