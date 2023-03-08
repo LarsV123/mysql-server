@@ -168,10 +168,11 @@ static size_t icu_strnxfrm_tmpl(const CHARSET_INFO *cs,
   // Generate a sort key and the length of the required buffer
   size_t expectedLen = collator->getSortKey(input, dst, dstlen);
 
-  assert(expectedLen <= dstlen);
   if (expectedLen > dstlen) {
-    // Output buffer is too small
+    // Output buffer is too small and gets filled to capacity
+    // We don't know if this is a perfect fit or an overflow
     log(CTYPE_ICU_FILENAME, "icu_strnxfrm_tmpl: output buffer too small");
+    return dstlen;
   }
 
   return expectedLen;
