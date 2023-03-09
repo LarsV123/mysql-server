@@ -18,11 +18,7 @@ void log(const char *file, const char *msg);
 const bool ICU_DEBUG = false;
 
 // Thread local collator objects
-struct ICU_COLLATOR {
-  icu::Collator *collator{};
-  UErrorCode status{};
-};
-ICU_COLLATOR *get_collator(const CHARSET_INFO *cs);
+icu::Collator *get_collator(const CHARSET_INFO *cs);
 
 // Init and unload functions
 bool icu_coll_init(CHARSET_INFO *cs, MY_CHARSET_LOADER *loader);

@@ -6156,8 +6156,8 @@ static bool wrapper_my_coll_init_uca(CHARSET_INFO *cs,
 
 static void wrapper_my_coll_uninit_uca(CHARSET_INFO *cs) {
   log(CTYPE_UCA_FILENAME, "wrapper_my_coll_uninit_uca");
+  icu_coll_uninit(cs);
   my_coll_uninit_uca(cs);
-  // icu_coll_uninit(cs);
 }
 
 MY_COLLATION_HANDLER icu_collation_handler = {

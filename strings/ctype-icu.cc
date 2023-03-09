@@ -13,23 +13,24 @@ void log(const char *file [[maybe_unused]], const char *msg [[maybe_unused]]) {
   }
 }
 
-thread_local ICU_COLLATOR *COLL_STRUCT = nullptr;
-thread_local std::unordered_map<uint, ICU_COLLATOR *> COLL_MAP =
-    std::unordered_map<uint, ICU_COLLATOR *>();
+// Common status for all collators
+thread_local icu::ErrorCode STATUS = icu::ErrorCode();
+
+// Map of collators for all locales (per thread)
+thread_local std::unordered_map<uint, icu::Collator *> COLL_MAP =
+    std::unordered_map<uint, icu::Collator *>();
 
 bool icu_coll_init(const CHARSET_INFO *cs) {
   // TODO: Implement tailoring
 
   log(CTYPE_ICU_FILENAME, "Creating new collator");
-  COLL_STRUCT = new ICU_COLLATOR();
   icu::Locale locale = icu::Locale(cs->comment);
 
   if (ICU_DEBUG) {
     printf("  Locale: %s\n", locale.getName());
   }
 
-  UErrorCode status = U_ZERO_ERROR;
-  icu::Collator *collator = icu::Collator::createInstance(locale, status);
+  icu::Collator *collator = icu::Collator::createInstance(locale, STATUS);
 
   // Set comparison level
   switch (cs->levels_for_compare) {
@@ -46,26 +47,26 @@ bool icu_coll_init(const CHARSET_INFO *cs) {
       collator->setStrength(icu::Collator::IDENTICAL);
       break;
   }
-  COLL_STRUCT->status = status;
-  COLL_STRUCT->collator = collator;
-  COLL_MAP[cs->number] = COLL_STRUCT;
+  COLL_MAP[cs->number] = collator;
   return true;
 }
-void icu_coll_uninit(CHARSET_INFO *cs [[maybe_unused]]){
-    // TODO: Implement this? Do we need to clean up anything?
+void icu_coll_uninit(CHARSET_INFO *cs [[maybe_unused]]) {
+  // Delete all collators
+  for (auto &[key, value] : COLL_MAP) {
+    delete value;
+  }
 };
 
-ICU_COLLATOR *get_collator(const CHARSET_INFO *cs) {
+icu::Collator *get_collator(const CHARSET_INFO *cs) {
   log(CTYPE_ICU_FILENAME, "get_collator");
 
   // Check if the collator is already in the map
   if (COLL_MAP.find(cs->number) != COLL_MAP.end()) {
     log(CTYPE_ICU_FILENAME, "Collator already exists");
-    COLL_STRUCT = COLL_MAP[cs->number];
   } else {
     icu_coll_init(cs);
   }
-  return COLL_STRUCT;
+  return COLL_MAP[cs->number];
 }
 
 // See examples at
@@ -135,9 +136,7 @@ int icu_strnncollsp(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
   log(CTYPE_ICU_FILENAME, "icu_strnncollsp");
 
   // Get a collator for this locale
-  auto collator_struct = get_collator(cs);
-  auto collator = collator_struct->collator;
-  auto status = collator_struct->status;
+  icu::Collator *collator = get_collator(cs);
 
   // Create StringPieces from the input strings
   icu::StringPiece sp1 =
@@ -146,7 +145,7 @@ int icu_strnncollsp(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
       icu::StringPiece(reinterpret_cast<const char *>(t), tlen);
 
   // Compare the two strings
-  int cmp = collator->compareUTF8(sp1, sp2, status);
+  int cmp = collator->compareUTF8(sp1, sp2, STATUS);
   return cmp;
 }
 
@@ -163,7 +162,7 @@ static size_t icu_strnxfrm_tmpl(const CHARSET_INFO *cs,
   auto input = icu::UnicodeString::fromUTF8(sp);
 
   // Get a collator for this locale
-  auto collator = get_collator(cs)->collator;
+  icu::Collator *collator = get_collator(cs);
 
   // Generate a sort key and the length of the required buffer
   size_t expectedLen = collator->getSortKey(input, dst, dstlen);
