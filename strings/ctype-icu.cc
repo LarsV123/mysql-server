@@ -35,15 +35,19 @@ bool icu_coll_init(const CHARSET_INFO *cs) {
   // Set comparison level
   switch (cs->levels_for_compare) {
     case 1:
+      log(CTYPE_ICU_FILENAME, "Setting collator strength to PRIMARY");
       collator->setStrength(icu::Collator::PRIMARY);
       break;
     case 2:
+      log(CTYPE_ICU_FILENAME, "Setting collator strength to SECONDARY");
       collator->setStrength(icu::Collator::SECONDARY);
       break;
     case 3:
+      log(CTYPE_ICU_FILENAME, "Setting collator strength to TERTIARY");
       collator->setStrength(icu::Collator::TERTIARY);
       break;
     default:
+      log(CTYPE_ICU_FILENAME, "Setting collator strength to IDENTICAL");
       collator->setStrength(icu::Collator::IDENTICAL);
       break;
   }
@@ -52,6 +56,7 @@ bool icu_coll_init(const CHARSET_INFO *cs) {
 }
 void icu_coll_uninit(CHARSET_INFO *cs [[maybe_unused]]) {
   // Delete all collators
+  log(CTYPE_ICU_FILENAME, "icu_coll_uninit");
   for (auto &[key, value] : COLL_MAP) {
     delete value;
   }
