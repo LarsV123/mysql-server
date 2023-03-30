@@ -1,8 +1,10 @@
 #ifndef CTYPE_ICU_H
 #define CTYPE_ICU_H
 #include <m_ctype.h>
+#include <stdio.h>
 #include <unicode/errorcode.h>
 #include <unicode/regex.h>
+#include <unicode/tblcoll.h>
 #include <unicode/uchar.h>
 #include <unicode/ucol.h>
 #include <unicode/unistr.h>
@@ -10,7 +12,12 @@
 #include <unicode/usearch.h>
 #include <unicode/ustring.h>
 #include <unicode/utypes.h>
+#include <cstring>
+#include <iostream>
+#include <map>
 #include "unicode/coll.h"
+
+#include "mb_wc.h"
 
 // Temp util methods
 void log(const char *file, const char *msg);
@@ -18,7 +25,7 @@ void log(const char *file, const char *msg);
 const bool ICU_DEBUG = false;
 
 // Thread local collator objects
-icu::Collator *get_collator(const CHARSET_INFO *cs);
+icu::RuleBasedCollator *get_collator(const CHARSET_INFO *cs);
 
 // Init and unload functions
 bool icu_coll_init(CHARSET_INFO *cs, MY_CHARSET_LOADER *loader);
