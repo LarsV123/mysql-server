@@ -26,6 +26,37 @@ bool icu_coll_init(const CHARSET_INFO *cs) {
   auto rules = icu::UnicodeString(cs->tailoring);
   icu::RuleBasedCollator *collator = new icu::RuleBasedCollator(rules, STATUS);
 
+  // Set comparison level
+  // https://unicode-org.github.io/icu/userguide/collation/concepts.html#comparison-levels
+  switch (cs->levels_for_compare) {
+    case 1:
+      // Equivalent to ai_ci (accent insensitive, case insensitive)
+      log(CTYPE_ICU_FILENAME, "Setting collator strength to PRIMARY");
+      collator->setStrength(icu::Collator::PRIMARY);
+      break;
+    case 2:
+      // Equivalent to as_ci (accent sensitive, case insensitive)
+      log(CTYPE_ICU_FILENAME, "Setting collator strength to SECONDARY");
+      collator->setStrength(icu::Collator::SECONDARY);
+      break;
+    case 3:
+      // Equivalent to as_cs (accent sensitive, case sensitive)
+      log(CTYPE_ICU_FILENAME, "Setting collator strength to TERTIARY");
+      collator->setStrength(icu::Collator::TERTIARY);
+      break;
+    case 4:
+      // Equivalent to as_cs_ks (accent, case and kana sensitive)
+      log(CTYPE_ICU_FILENAME, "Setting collator strength to QUATERNARY");
+      collator->setStrength(icu::Collator::QUATERNARY);
+      break;
+    default:
+      // Compare by code point (equivalent to binary)
+      // Significant performance cost for comparisons and sort key generation
+      log(CTYPE_ICU_FILENAME, "Setting collator strength to IDENTICAL");
+      collator->setStrength(icu::Collator::IDENTICAL);
+      break;
+  }
+
   COLL_MAP[cs->number] = collator;
   return true;
 }
