@@ -46,6 +46,7 @@
 #include <map>
 #include <utility>
 
+#include "ctype-icu-tailorings.h"
 #include "ctype-icu.h"
 #include "m_ctype.h"
 #include "m_string.h"
@@ -12083,43 +12084,40 @@ CHARSET_INFO my_charset_utf8mb4_mn_cyrl_0900_as_cs = {
     NO_PAD};
 
 // Should be equivalent to utf8mb4_nb_0900_ai_ci
-CHARSET_INFO icu_charset_utf8mb4_nb_ai_ci =
-    {
-        324,
-        0,
-        0,                          /* number       */
-        MY_CS_UTF8MB4_UCA_FLAGS,    /* state    */
-        MY_UTF8MB4,                 /* csname       */
-        MY_UTF8MB4 "_nb_icu_ai_ci", /* m_coll_name  */
-        "nb_NO",                    /* comment      */
-        "&D<<đ<<<Đ<<ð<<<Ð&t<<<þ/h&T<<<Þ/H&Y<<ü<<<Ü<<ű<<<Ű&[before "
-        "1]ǀ<æ<<<Æ<<ä<<<Ä<<ę<<<Ę<ø<<<Ø<<ö<<<Ö<<ő<<<Ő<<œ<<<Œ<å<<<Å<<aa<<<Aa<<<"
-        "AA",                   /* tailoring    */
-        nullptr,                /* coll_param   */
-        ctype_utf8,             /* ctype        */
-        nullptr,                /* to_lower     */
-        nullptr,                /* to_upper     */
-        nullptr,                /* sort_order   */
-        &my_uca_v900,           /* uca_900      */
-        nullptr,                /* tab_to_uni   */
-        nullptr,                /* tab_from_uni */
-        &my_unicase_unicode900, /* caseinfo     */
-        nullptr,                /* state_map    */
-        nullptr,                /* ident_map    */
-        0,                      /* strxfrm_multiply */
-        1,                      /* caseup_multiply  */
-        1,                      /* casedn_multiply  */
-        1,                      /* mbminlen      */
-        4,                      /* mbmaxlen      */
-        1,                      /* mbmaxlenlen   */
-        9,                      /* min_sort_char */
-        0x10FFFF,               /* max_sort_char */
-        ' ',                    /* pad char      */
-        false,                  /* escape_with_backslash_is_dangerous */
-        1,                      /* levels_for_compare */
-        &icu_charset_handler,
-        &icu_collation_handler,
-        NO_PAD};
+CHARSET_INFO icu_charset_utf8mb4_nb_ai_ci = {
+    324,
+    0,
+    0,                          /* number       */
+    MY_CS_UTF8MB4_UCA_FLAGS,    /* state    */
+    MY_UTF8MB4,                 /* csname       */
+    MY_UTF8MB4 "_nb_icu_ai_ci", /* m_coll_name  */
+    "nb_NO",                    /* comment      */
+    ICU_NB_NO,                  /* tailoring    */
+    nullptr,                    /* coll_param   */
+    ctype_utf8,                 /* ctype        */
+    nullptr,                    /* to_lower     */
+    nullptr,                    /* to_upper     */
+    nullptr,                    /* sort_order   */
+    &my_uca_v900,               /* uca_900      */
+    nullptr,                    /* tab_to_uni   */
+    nullptr,                    /* tab_from_uni */
+    &my_unicase_unicode900,     /* caseinfo     */
+    nullptr,                    /* state_map    */
+    nullptr,                    /* ident_map    */
+    0,                          /* strxfrm_multiply */
+    1,                          /* caseup_multiply  */
+    1,                          /* casedn_multiply  */
+    1,                          /* mbminlen      */
+    4,                          /* mbmaxlen      */
+    1,                          /* mbmaxlenlen   */
+    9,                          /* min_sort_char */
+    0x10FFFF,                   /* max_sort_char */
+    ' ',                        /* pad char      */
+    false,                      /* escape_with_backslash_is_dangerous */
+    1,                          /* levels_for_compare */
+    &icu_charset_handler,
+    &icu_collation_handler,
+    NO_PAD};
 
 // Should be equivalent to my_charset_utf8mb4_0900_ai_ci
 CHARSET_INFO icu_charset_utf8mb4_us_ai_ci = {
@@ -12130,7 +12128,7 @@ CHARSET_INFO icu_charset_utf8mb4_us_ai_ci = {
     MY_UTF8MB4,                 /* csname       */
     MY_UTF8MB4 "_us_icu_ai_ci", /* m_coll_name  */
     "en_US",                    /* comment      */
-    "",                         /* tailoring    */
+    ICU_EN_US,                  /* tailoring    */
     nullptr,                    /* coll_param   */
     ctype_utf8,                 /* ctype        */
     nullptr,                    /* to_lower     */
