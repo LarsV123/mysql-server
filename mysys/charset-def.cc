@@ -269,6 +269,11 @@ extern CHARSET_INFO my_charset_gb18030_unicode_520_ci;
 
 extern CHARSET_INFO icu_charset_utf8mb4_nb_ai_ci;
 extern CHARSET_INFO icu_charset_utf8mb4_us_ai_ci;
+extern CHARSET_INFO icu_charset_utf8mb4_us_as_cs;
+extern CHARSET_INFO icu_charset_utf8mb4_fr_ai_ci;
+extern CHARSET_INFO icu_charset_utf8mb4_zh_0900_as_cs;
+extern CHARSET_INFO icu_charset_utf8mb4_ja_0900_as_cs;
+extern CHARSET_INFO icu_charset_utf8mb4_ja_0900_as_cs_ks;
 
 bool init_compiled_charsets(myf flags [[maybe_unused]]) {
   CHARSET_INFO *cs;
@@ -531,6 +536,11 @@ bool init_compiled_charsets(myf flags [[maybe_unused]]) {
 
   add_compiled_collation(&icu_charset_utf8mb4_nb_ai_ci);
   add_compiled_collation(&icu_charset_utf8mb4_us_ai_ci);
+  add_compiled_collation(&icu_charset_utf8mb4_us_as_cs);
+  add_compiled_collation(&icu_charset_utf8mb4_fr_ai_ci);
+  add_compiled_collation(&icu_charset_utf8mb4_zh_0900_as_cs);
+  add_compiled_collation(&icu_charset_utf8mb4_ja_0900_as_cs);
+  add_compiled_collation(&icu_charset_utf8mb4_ja_0900_as_cs_ks);
 
   /* Copy compiled charsets */
   for (cs = compiled_charsets; cs->m_coll_name; cs++)
