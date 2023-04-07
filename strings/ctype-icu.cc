@@ -1,4 +1,5 @@
 #include "ctype-icu.h"
+#include "ctype-icu-tailorings.h"
 
 const char *CTYPE_ICU_FILENAME = "ctype-icu.cc";
 void log(const char *file [[maybe_unused]], const char *msg [[maybe_unused]]) {
@@ -14,16 +15,46 @@ thread_local icu::ErrorCode STATUS = icu::ErrorCode();
 thread_local std::unordered_map<uint, icu::RuleBasedCollator *> COLL_MAP =
     std::unordered_map<uint, icu::RuleBasedCollator *>();
 
+icu::UnicodeString getRules(const CHARSET_INFO *cs) {
+  // Hardcoded mapping of collation number to tailoring
+  // Used because other parts of the system expect the tailoring in a different
+  // format than ICU does, so we can't put it in the CHARSET_INFO struct.
+  // Should be converted to a map or something, but this is enough
+  // for a prototype.
+
+  switch (cs->number) {
+    case 324:
+      return icu::UnicodeString(ICU_NB_NO);
+    case 325:
+      return icu::UnicodeString(ICU_EN_US);
+    case 326:
+      return icu::UnicodeString(ICU_EN_US);
+    case 327:
+      return icu::UnicodeString(ICU_FR_FR);
+    case 328:
+      return icu::UnicodeString(ICU_ZH_HANS);
+    case 329:
+      return icu::UnicodeString(ICU_JA_JP);
+    case 330:
+      return icu::UnicodeString(ICU_JA_JP);
+    default:
+      assert(false);
+      return icu::UnicodeString("");
+  }
+}
+
 bool icu_coll_init(const CHARSET_INFO *cs) {
   log(CTYPE_ICU_FILENAME, "Creating new collator");
 
   if (ICU_DEBUG) {
     printf("  Collation name: %s\n", cs->m_coll_name);
-    printf("  Tailoring: %s\n", cs->tailoring);
+    printf("  Tailoring: %s\n", cs->comment);
+    printf("  ICU version: %s\n", U_ICU_VERSION);
   }
 
   // Create collator from tailoring
-  auto rules = icu::UnicodeString(cs->tailoring);
+  // auto rules = icu::UnicodeString(cs->tailoring);
+  auto rules = getRules(cs);
   icu::RuleBasedCollator *collator = new icu::RuleBasedCollator(rules, STATUS);
 
   // Set comparison level

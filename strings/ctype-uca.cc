@@ -46,7 +46,6 @@
 #include <map>
 #include <utility>
 
-#include "ctype-icu-tailorings.h"
 #include "ctype-icu.h"
 #include "m_ctype.h"
 #include "m_string.h"
@@ -12092,7 +12091,7 @@ CHARSET_INFO icu_charset_utf8mb4_nb_ai_ci = {
     MY_UTF8MB4,                 /* csname       */
     MY_UTF8MB4 "_nb_icu_ai_ci", /* m_coll_name  */
     "nb_NO",                    /* comment      */
-    ICU_NB_NO,                  /* tailoring    */
+    "",                         /* tailoring    */
     nullptr,                    /* coll_param   */
     ctype_utf8,                 /* ctype        */
     nullptr,                    /* to_lower     */
@@ -12128,7 +12127,7 @@ CHARSET_INFO icu_charset_utf8mb4_us_ai_ci = {
     MY_UTF8MB4,                 /* csname       */
     MY_UTF8MB4 "_us_icu_ai_ci", /* m_coll_name  */
     "en_US",                    /* comment      */
-    ICU_EN_US,                  /* tailoring    */
+    "",                         /* tailoring    */
     nullptr,                    /* coll_param   */
     ctype_utf8,                 /* ctype        */
     nullptr,                    /* to_lower     */
@@ -12164,7 +12163,7 @@ CHARSET_INFO icu_charset_utf8mb4_us_as_cs = {
     MY_UTF8MB4,                 /* csname       */
     MY_UTF8MB4 "_us_icu_as_cs", /* m_coll_name  */
     "en_US",                    /* comment      */
-    ICU_EN_US,                  /* tailoring    */
+    "",                         /* tailoring    */
     nullptr,                    /* coll_param   */
     ctype_utf8,                 /* ctype        */
     nullptr,                    /* to_lower     */
@@ -12200,7 +12199,7 @@ CHARSET_INFO icu_charset_utf8mb4_fr_ai_ci = {
     MY_UTF8MB4,                 /* csname       */
     MY_UTF8MB4 "_fr_icu_ai_ci", /* m_coll_name  */
     "fr_FR",                    /* comment      */
-    ICU_FR_FR,                  /* tailoring    */
+    "",                         /* tailoring    */
     nullptr,                    /* coll_param   */
     ctype_utf8,                 /* ctype        */
     nullptr,                    /* to_lower     */
@@ -12231,34 +12230,34 @@ CHARSET_INFO icu_charset_utf8mb4_fr_ai_ci = {
 CHARSET_INFO icu_charset_utf8mb4_zh_0900_as_cs = {
     328,
     0,
-    0,                           /* number       */
-    MY_CS_UTF8MB4_UCA_FLAGS,     /* state    */
-    MY_UTF8MB4,                  /* csname       */
-    MY_UTF8MB4 "_zh_0900_as_cs", /* m_coll_name  */
-    "zh_Hans",                   /* comment      */
-    ICU_ZH_HANS,                 /* tailoring    */
-    nullptr,                     /* coll_param   */
-    ctype_utf8,                  /* ctype        */
-    nullptr,                     /* to_lower     */
-    nullptr,                     /* to_upper     */
-    nullptr,                     /* sort_order   */
-    &my_uca_v900,                /* uca_900      */
-    nullptr,                     /* tab_to_uni   */
-    nullptr,                     /* tab_from_uni */
-    &my_unicase_unicode900,      /* caseinfo     */
-    nullptr,                     /* state_map    */
-    nullptr,                     /* ident_map    */
-    0,                           /* strxfrm_multiply */
-    1,                           /* caseup_multiply  */
-    1,                           /* casedn_multiply  */
-    1,                           /* mbminlen      */
-    4,                           /* mbmaxlen      */
-    1,                           /* mbmaxlenlen   */
-    32,                          /* min_sort_char */
-    0x10FFFF,                    /* max_sort_char */
-    ' ',                         /* pad char      */
-    false,                       /* escape_with_backslash_is_dangerous */
-    3,                           /* levels_for_compare */
+    0,                               /* number       */
+    MY_CS_UTF8MB4_UCA_FLAGS,         /* state    */
+    MY_UTF8MB4,                      /* csname       */
+    MY_UTF8MB4 "_zh_icu_0900_as_cs", /* m_coll_name  */
+    "zh_Hans",                       /* comment      */
+    "",                              /* tailoring    */
+    nullptr,                         /* coll_param   */
+    ctype_utf8,                      /* ctype        */
+    nullptr,                         /* to_lower     */
+    nullptr,                         /* to_upper     */
+    nullptr,                         /* sort_order   */
+    &my_uca_v900,                    /* uca_900      */
+    nullptr,                         /* tab_to_uni   */
+    nullptr,                         /* tab_from_uni */
+    &my_unicase_unicode900,          /* caseinfo     */
+    nullptr,                         /* state_map    */
+    nullptr,                         /* ident_map    */
+    0,                               /* strxfrm_multiply */
+    1,                               /* caseup_multiply  */
+    1,                               /* casedn_multiply  */
+    1,                               /* mbminlen      */
+    4,                               /* mbmaxlen      */
+    1,                               /* mbmaxlenlen   */
+    32,                              /* min_sort_char */
+    0x10FFFF,                        /* max_sort_char */
+    ' ',                             /* pad char      */
+    false,                           /* escape_with_backslash_is_dangerous */
+    3,                               /* levels_for_compare */
     &icu_charset_handler,
     &icu_collation_handler,
     NO_PAD};
@@ -12267,34 +12266,34 @@ CHARSET_INFO icu_charset_utf8mb4_zh_0900_as_cs = {
 CHARSET_INFO icu_charset_utf8mb4_ja_0900_as_cs = {
     329,
     0,
-    0,                           /* number       */
-    MY_CS_UTF8MB4_UCA_FLAGS,     /* state    */
-    MY_UTF8MB4,                  /* csname       */
-    MY_UTF8MB4 "_ja_0900_as_cs", /* m_coll_name  */
-    "ja_JP",                     /* comment      */
-    ICU_JA_JP,                   /* tailoring    */
-    nullptr,                     /* coll_param   */
-    ctype_utf8,                  /* ctype        */
-    nullptr,                     /* to_lower     */
-    nullptr,                     /* to_upper     */
-    nullptr,                     /* sort_order   */
-    &my_uca_v900,                /* uca_900      */
-    nullptr,                     /* tab_to_uni   */
-    nullptr,                     /* tab_from_uni */
-    &my_unicase_unicode900,      /* caseinfo     */
-    nullptr,                     /* state_map    */
-    nullptr,                     /* ident_map    */
-    0,                           /* strxfrm_multiply */
-    1,                           /* caseup_multiply  */
-    1,                           /* casedn_multiply  */
-    1,                           /* mbminlen      */
-    4,                           /* mbmaxlen      */
-    1,                           /* mbmaxlenlen   */
-    32,                          /* min_sort_char */
-    0x10FFFF,                    /* max_sort_char */
-    ' ',                         /* pad char      */
-    false,                       /* escape_with_backslash_is_dangerous */
-    3,                           /* levels_for_compare */
+    0,                               /* number       */
+    MY_CS_UTF8MB4_UCA_FLAGS,         /* state    */
+    MY_UTF8MB4,                      /* csname       */
+    MY_UTF8MB4 "_ja_icu_0900_as_cs", /* m_coll_name  */
+    "ja_JP",                         /* comment      */
+    "",                              /* tailoring    */
+    nullptr,                         /* coll_param   */
+    ctype_utf8,                      /* ctype        */
+    nullptr,                         /* to_lower     */
+    nullptr,                         /* to_upper     */
+    nullptr,                         /* sort_order   */
+    &my_uca_v900,                    /* uca_900      */
+    nullptr,                         /* tab_to_uni   */
+    nullptr,                         /* tab_from_uni */
+    &my_unicase_unicode900,          /* caseinfo     */
+    nullptr,                         /* state_map    */
+    nullptr,                         /* ident_map    */
+    0,                               /* strxfrm_multiply */
+    1,                               /* caseup_multiply  */
+    1,                               /* casedn_multiply  */
+    1,                               /* mbminlen      */
+    4,                               /* mbmaxlen      */
+    1,                               /* mbmaxlenlen   */
+    32,                              /* min_sort_char */
+    0x10FFFF,                        /* max_sort_char */
+    ' ',                             /* pad char      */
+    false,                           /* escape_with_backslash_is_dangerous */
+    3,                               /* levels_for_compare */
     &icu_charset_handler,
     &icu_collation_handler,
     NO_PAD};
@@ -12303,34 +12302,34 @@ CHARSET_INFO icu_charset_utf8mb4_ja_0900_as_cs = {
 CHARSET_INFO icu_charset_utf8mb4_ja_0900_as_cs_ks = {
     330,
     0,
-    0,                              /* number       */
-    MY_CS_UTF8MB4_UCA_FLAGS,        /* state    */
-    MY_UTF8MB4,                     /* csname       */
-    MY_UTF8MB4 "_ja_0900_as_cs_ks", /* m_coll_name  */
-    "ja_JP",                        /* comment      */
-    ICU_JA_JP,                      /* tailoring    */
-    nullptr,                        /* coll_param   */
-    ctype_utf8,                     /* ctype        */
-    nullptr,                        /* to_lower     */
-    nullptr,                        /* to_upper     */
-    nullptr,                        /* sort_order   */
-    &my_uca_v900,                   /* uca_900      */
-    nullptr,                        /* tab_to_uni   */
-    nullptr,                        /* tab_from_uni */
-    &my_unicase_unicode900,         /* caseinfo     */
-    nullptr,                        /* state_map    */
-    nullptr,                        /* ident_map    */
-    0,                              /* strxfrm_multiply */
-    1,                              /* caseup_multiply  */
-    1,                              /* casedn_multiply  */
-    1,                              /* mbminlen      */
-    4,                              /* mbmaxlen      */
-    1,                              /* mbmaxlenlen   */
-    32,                             /* min_sort_char */
-    0x10FFFF,                       /* max_sort_char */
-    ' ',                            /* pad char      */
-    false,                          /* escape_with_backslash_is_dangerous */
-    4,                              /* levels_for_compare */
+    0,                                  /* number       */
+    MY_CS_UTF8MB4_UCA_FLAGS,            /* state    */
+    MY_UTF8MB4,                         /* csname       */
+    MY_UTF8MB4 "_ja_icu_0900_as_cs_ks", /* m_coll_name  */
+    "ja_JP",                            /* comment      */
+    "",                                 /* tailoring    */
+    nullptr,                            /* coll_param   */
+    ctype_utf8,                         /* ctype        */
+    nullptr,                            /* to_lower     */
+    nullptr,                            /* to_upper     */
+    nullptr,                            /* sort_order   */
+    &my_uca_v900,                       /* uca_900      */
+    nullptr,                            /* tab_to_uni   */
+    nullptr,                            /* tab_from_uni */
+    &my_unicase_unicode900,             /* caseinfo     */
+    nullptr,                            /* state_map    */
+    nullptr,                            /* ident_map    */
+    0,                                  /* strxfrm_multiply */
+    1,                                  /* caseup_multiply  */
+    1,                                  /* casedn_multiply  */
+    1,                                  /* mbminlen      */
+    4,                                  /* mbmaxlen      */
+    1,                                  /* mbmaxlenlen   */
+    32,                                 /* min_sort_char */
+    0x10FFFF,                           /* max_sort_char */
+    ' ',                                /* pad char      */
+    false,                              /* escape_with_backslash_is_dangerous */
+    4,                                  /* levels_for_compare */
     &icu_charset_handler,
     &icu_collation_handler,
     NO_PAD};
