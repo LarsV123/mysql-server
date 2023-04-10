@@ -12083,7 +12083,7 @@ CHARSET_INFO my_charset_utf8mb4_mn_cyrl_0900_as_cs = {
     NO_PAD};
 
 // Should be equivalent to utf8mb4_nb_0900_ai_ci
-CHARSET_INFO icu_charset_utf8mb4_nb_ai_ci = {
+CHARSET_INFO icu_charset_utf8mb4_nb_NO_ai_ci = {
     324,
     0,
     0,                            /* number       */
@@ -12119,7 +12119,7 @@ CHARSET_INFO icu_charset_utf8mb4_nb_ai_ci = {
     NO_PAD};
 
 // Should be equivalent to my_charset_utf8mb4_0900_ai_ci
-CHARSET_INFO icu_charset_utf8mb4_us_ai_ci = {
+CHARSET_INFO icu_charset_utf8mb4_en_US_ai_ci = {
     325,
     0,
     0,                            /* number       */
@@ -12155,7 +12155,7 @@ CHARSET_INFO icu_charset_utf8mb4_us_ai_ci = {
     NO_PAD};
 
 // Should be equivalent to my_charset_utf8mb4_0900_as_cs
-CHARSET_INFO icu_charset_utf8mb4_us_as_cs = {
+CHARSET_INFO icu_charset_utf8mb4_en_US_as_cs = {
     326,
     0,
     0,                            /* number       */
@@ -12191,7 +12191,7 @@ CHARSET_INFO icu_charset_utf8mb4_us_as_cs = {
     NO_PAD};
 
 // Should be equivalent to my_charset_utf8mb4_0900_ai_ci
-CHARSET_INFO icu_charset_utf8mb4_fr_ai_ci = {
+CHARSET_INFO icu_charset_utf8mb4_fr_FR_ai_ci = {
     327,
     0,
     0,                            /* number       */
@@ -12227,7 +12227,7 @@ CHARSET_INFO icu_charset_utf8mb4_fr_ai_ci = {
     NO_PAD};
 
 // Should be equivalent to my_charset_utf8mb4_zh_0900_as_cs
-CHARSET_INFO icu_charset_utf8mb4_zh_0900_as_cs = {
+CHARSET_INFO icu_charset_utf8mb4_zh_Hans_as_cs = {
     328,
     0,
     0,                               /* number       */
@@ -12263,7 +12263,7 @@ CHARSET_INFO icu_charset_utf8mb4_zh_0900_as_cs = {
     NO_PAD};
 
 // Should be equivalent to my_charset_utf8mb4_ja_0900_as_cs
-CHARSET_INFO icu_charset_utf8mb4_ja_0900_as_cs = {
+CHARSET_INFO icu_charset_utf8mb4_ja_JP_as_cs = {
     329,
     0,
     0,                             /* number       */
@@ -12299,7 +12299,7 @@ CHARSET_INFO icu_charset_utf8mb4_ja_0900_as_cs = {
     NO_PAD};
 
 // Should be equivalent to my_charset_utf8mb4_ja_0900_as_cs_ks
-CHARSET_INFO icu_charset_utf8mb4_ja_0900_as_cs_ks = {
+CHARSET_INFO icu_charset_utf8mb4_ja_JP_as_cs_ks = {
     330,
     0,
     0,                                /* number       */
