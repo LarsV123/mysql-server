@@ -19,10 +19,12 @@
 
 #include "mb_wc.h"
 
-// Temp util methods
+// Util functions and variables
 void log(const char *file, const char *msg);
 // const bool ICU_DEBUG = true;
 const bool ICU_DEBUG = false;
+
+icu::UnicodeString getRulePrefix();
 
 // Thread local collator objects
 icu::RuleBasedCollator *get_collator(const CHARSET_INFO *cs);

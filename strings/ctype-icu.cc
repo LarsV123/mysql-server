@@ -15,6 +15,69 @@ thread_local icu::ErrorCode STATUS = icu::ErrorCode();
 thread_local std::unordered_map<uint, icu::RuleBasedCollator *> COLL_MAP =
     std::unordered_map<uint, icu::RuleBasedCollator *>();
 
+icu::UnicodeString getRulePrefix() {
+  // Hardcoded prefix for all tailoring rules
+  // This is a hack to simulate adding different prefixes to the tailoring,
+  // which could be used to restore the original collation order if there were
+  // changes to the root collation order in a newer version of ICU.
+  // This is not a complete solution, but it's enough for a prototype.
+
+  // In a production system, this could use the ICU version to determine
+  // which strings to add to the prefix.
+  if (U_ICU_VERSION_MAJOR_NUM > 60) {
+    log(CTYPE_ICU_FILENAME, "ICU version > 60");
+  } else {
+    log(CTYPE_ICU_FILENAME, "ICU version <= 60");
+  }
+  if (U_ICU_VERSION_MAJOR_NUM > 65) {
+    log(CTYPE_ICU_FILENAME, "ICU version > 65");
+  } else {
+    log(CTYPE_ICU_FILENAME, "ICU version <= 65");
+  }
+  if (U_ICU_VERSION_MAJOR_NUM > 66 && U_ICU_VERSION_MINOR_NUM > 0) {
+    log(CTYPE_ICU_FILENAME, "ICU version > 66");
+  } else {
+    log(CTYPE_ICU_FILENAME, "ICU version <= 66");
+  }
+  if (U_ICU_VERSION_MAJOR_NUM > 66 && U_ICU_VERSION_MINOR_NUM > 1) {
+    log(CTYPE_ICU_FILENAME, "ICU version > 66.1");
+  } else {
+    log(CTYPE_ICU_FILENAME, "ICU version <= 66.1");
+  }
+  if (U_ICU_VERSION_MAJOR_NUM > 66 && U_ICU_VERSION_MINOR_NUM > 1 &&
+      U_ICU_VERSION_PATCHLEVEL_NUM > 1) {
+    log(CTYPE_ICU_FILENAME, "ICU version > 66.1.1");
+  } else {
+    log(CTYPE_ICU_FILENAME, "ICU version <= 66.1.1");
+  }
+  if (U_ICU_VERSION_MAJOR_NUM > 70) {
+    log(CTYPE_ICU_FILENAME, "ICU version > 70");
+  } else {
+    log(CTYPE_ICU_FILENAME, "ICU version <= 70");
+  }
+
+  // This is an example prefix, where we gradually build a prefix to compensate
+  // for different changes/fixes in the root collation order.
+  // The changes are nonsense, but should have at least as much performance
+  // impact as real changes.
+
+  // Reverse the order of all capital letters from B to F
+  auto reverseCapitals = icu::UnicodeString("&F<E<D<C<B");
+
+  // N and M are basically the same, and should sort the same
+  auto nEqualsO = icu::UnicodeString("&M=N");
+
+  // V and W too, but only lowercase
+  auto vEqualsW = icu::UnicodeString("&v=w");
+
+  // Reorder blocks of characters so that the blocks are sorted alphabetically
+  auto reorderBlocks = icu::UnicodeString(
+      "[reorder currency digit Grek Latn Hani punct space Zzzz]");
+
+  auto prefix = reverseCapitals + nEqualsO + vEqualsW + reorderBlocks;
+  return prefix;
+}
+
 icu::UnicodeString getRules(const CHARSET_INFO *cs) {
   // Hardcoded mapping of collation number to tailoring
   // Used because other parts of the system expect the tailoring in a different
@@ -53,9 +116,11 @@ bool icu_coll_init(const CHARSET_INFO *cs) {
   }
 
   // Create collator from tailoring
-  // auto rules = icu::UnicodeString(cs->tailoring);
+  auto prefix = getRulePrefix();
   auto rules = getRules(cs);
-  icu::RuleBasedCollator *collator = new icu::RuleBasedCollator(rules, STATUS);
+  auto tailoring = prefix + rules;
+  icu::RuleBasedCollator *collator =
+      new icu::RuleBasedCollator(tailoring, STATUS);
 
   // Set comparison level
   // https://unicode-org.github.io/icu/userguide/collation/concepts.html#comparison-levels
