@@ -58,24 +58,55 @@ icu::UnicodeString getRulePrefix() {
 
   // This is an example prefix, where we gradually build a prefix to compensate
   // for different changes/fixes in the root collation order.
+
   // The changes are nonsense, but should have at least as much performance
   // impact as real changes.
+  // These rules essentially move arbitrary emojis to the end of the collation.
 
-  // Reverse the order of all capital letters from B to F
-  auto reverseCapitals = icu::UnicodeString("&F<E<D<C<B");
+  // Reset at the last valid code point
+  auto r0 = icu::UnicodeString("&\U00010FFFD");
 
-  // N and M are basically the same, and should sort the same
-  auto nEqualsO = icu::UnicodeString("&M=N");
+  auto r1 = icu::UnicodeString(
+      "<🐶<🐱<🐭<🐹<🐰<🦊<🐻<🐼<🐨<🐯"
+      "<🦁<🐮<🐷<🦄<🐴<🐗<🐺<🐸<🐒<🦍");
 
-  // V and W too, but only lowercase
-  auto vEqualsW = icu::UnicodeString("&v=w");
+  auto r2 = icu::UnicodeString(
+      "<🦌<🦒<🦓<🦏<🦛<🦘<🦙<🦞<🦩<🦚"
+      "<🦜<🦢<🦆<🦉<🦔<🦇<🦋<🐜<🐌<🦑");
 
-  // Reorder blocks of characters so that the blocks are sorted alphabetically
-  auto reorderBlocks = icu::UnicodeString(
-      "[reorder currency digit Grek Latn Hani punct space Zzzz]");
+  auto r3 = icu::UnicodeString(
+      "<🦐<🦀<🐍<🦎<🐢<🦕<🦖<🦟<🦗<🕷"
+      "<🕸<🦂<🦠<🦨<🦦<🦥<🦡<🦧<🐊<🐅");
 
-  auto prefix = reverseCapitals + nEqualsO + vEqualsW + reorderBlocks;
-  return prefix;
+  auto r4 = icu::UnicodeString(
+      "<🐆<🦈<🌵<🌴<🌲<🌳<🌺<🌸<🌻<🌼"
+      "<🌷<🍂<🍁<🍄<🍀<🌿<🌱<🍃<🌾<🌰");
+
+  auto r5 = icu::UnicodeString(
+      "<🍇<🍈<🍉<🍊<🍋<🍌<🍍<🍎<🍏<🍐"
+      "<🍑<🍒<🍓<🥝<🍅<🥑<🍆<🥔<🥕<🌽");
+
+  if (ICU_DEBUG) {
+    printf("TAILORING_PREFIX_SIZE: %d\n", TAILORING_PREFIX_SIZE);
+  }
+  switch (TAILORING_PREFIX_SIZE) {
+    case 0:
+      return icu::UnicodeString();
+    case 1:
+      return r0 + r1;
+    case 2:
+      return r0 + r1 + r2;
+    case 3:
+      return r0 + r1 + r2 + r3;
+    case 4:
+      return r0 + r1 + r2 + r3 + r4;
+    case 5:
+      return r0 + r1 + r2 + r3 + r4 + r5;
+    default:
+      log(CTYPE_ICU_FILENAME, "Invalid TAILORING_PREFIX_SIZE");
+      assert(false);  // Should never happen
+      return icu::UnicodeString();
+  }
 }
 
 icu::UnicodeString getRules(const CHARSET_INFO *cs) {

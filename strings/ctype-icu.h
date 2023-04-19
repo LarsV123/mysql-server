@@ -24,6 +24,9 @@ void log(const char *file, const char *msg);
 // const bool ICU_DEBUG = true;
 const bool ICU_DEBUG = false;
 
+// How many extra tailoring rules to apply
+const int TAILORING_PREFIX_SIZE = 5;
+
 icu::UnicodeString getRulePrefix();
 
 // Thread local collator objects
