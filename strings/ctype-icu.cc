@@ -195,7 +195,7 @@ void icu_coll_uninit(CHARSET_INFO *cs [[maybe_unused]]) {
   }
 };
 
-icu::RuleBasedCollator *get_collator(const CHARSET_INFO *cs) {
+icu::Collator *get_collator(const CHARSET_INFO *cs) {
   log(CTYPE_ICU_FILENAME, "get_collator");
 
   // Check if the collator is already in the map

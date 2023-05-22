@@ -31,7 +31,7 @@ const int TAILORING_PREFIX_SIZE = 5;
 icu::UnicodeString getRulePrefix();
 
 // Thread local collator objects
-icu::RuleBasedCollator *get_collator(const CHARSET_INFO *cs);
+icu::Collator *get_collator(const CHARSET_INFO *cs);
 
 // Init and unload functions
 bool icu_coll_init(CHARSET_INFO *cs, MY_CHARSET_LOADER *loader);
