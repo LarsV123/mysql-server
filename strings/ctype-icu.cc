@@ -12,8 +12,8 @@ void log(const char *file [[maybe_unused]], const char *msg [[maybe_unused]]) {
 thread_local icu::ErrorCode STATUS = icu::ErrorCode();
 
 // Map of collators for all locales (per thread)
-thread_local std::unordered_map<uint, icu::RuleBasedCollator *> COLL_MAP =
-    std::unordered_map<uint, icu::RuleBasedCollator *>();
+thread_local std::unordered_map<uint, icu::Collator *> COLL_MAP =
+    std::unordered_map<uint, icu::Collator *>();
 
 icu::UnicodeString getRulePrefix() {
   // Hardcoded prefix for all tailoring rules
