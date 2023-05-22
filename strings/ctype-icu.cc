@@ -146,12 +146,18 @@ bool icu_coll_init(const CHARSET_INFO *cs) {
     printf("  ICU version: %s\n", U_ICU_VERSION);
   }
 
-  // Create collator from tailoring
-  auto prefix = getRulePrefix();
-  auto rules = getRules(cs);
-  auto tailoring = prefix + rules;
-  icu::RuleBasedCollator *collator =
-      new icu::RuleBasedCollator(tailoring, STATUS);
+  icu::Collator *collator = nullptr;
+  if (ICU_FROZEN) {
+    // Create collator from tailoring
+    auto prefix = getRulePrefix();
+    auto rules = getRules(cs);
+    auto tailoring = prefix + rules;
+    collator = new icu::RuleBasedCollator(tailoring, STATUS);
+  } else {
+    // Create collator from locale
+    icu::Locale locale = icu::Locale(cs->comment);
+    collator = icu::Collator::createInstance(locale, STATUS);
+  }
 
   // Set comparison level
   // https://unicode-org.github.io/icu/userguide/collation/concepts.html#comparison-levels

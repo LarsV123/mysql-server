@@ -21,14 +21,20 @@
 
 // Util functions and variables
 void log(const char *file, const char *msg);
-// const bool ICU_DEBUG = true;
-const bool ICU_DEBUG = false;
 icu::UnicodeString convert_utf8_to_utf16(const uchar *src, size_t srclen);
+icu::UnicodeString getRulePrefix();
+
+// Enable debug logging
+const bool ICU_DEBUG = false;
+
+// Enable "frozen" ICU collations using tailoring (i.e. not using Locale)
+const bool ICU_FROZEN = true;
+
+// Apply extra tailoring rules to the collator (to test performance)
+const bool ICU_EXTRA_TAILORING = false;
 
 // How many extra tailoring rules to apply
 const int TAILORING_PREFIX_SIZE = 5;
-
-icu::UnicodeString getRulePrefix();
 
 // Thread local collator objects
 icu::Collator *get_collator(const CHARSET_INFO *cs);
