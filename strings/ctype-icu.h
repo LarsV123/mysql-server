@@ -33,9 +33,6 @@ const bool ICU_FROZEN = true;
 // Apply extra tailoring rules to the collator (to test performance)
 const bool ICU_EXTRA_TAILORING = false;
 
-// How many extra tailoring rules to apply
-const int TAILORING_PREFIX_SIZE = 5;
-
 // Thread local collator objects
 icu::Collator *get_collator(const CHARSET_INFO *cs);
 

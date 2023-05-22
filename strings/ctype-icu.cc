@@ -86,26 +86,13 @@ icu::UnicodeString getRulePrefix() {
       "<🍇<🍈<🍉<🍊<🍋<🍌<🍍<🍎<🍏<🍐"
       "<🍑<🍒<🍓<🥝<🍅<🥑<🍆<🥔<🥕<🌽");
 
-  if (ICU_DEBUG) {
-    printf("TAILORING_PREFIX_SIZE: %d\n", TAILORING_PREFIX_SIZE);
-  }
-  switch (TAILORING_PREFIX_SIZE) {
-    case 0:
-      return icu::UnicodeString();
-    case 1:
-      return r0 + r1;
-    case 2:
-      return r0 + r1 + r2;
-    case 3:
-      return r0 + r1 + r2 + r3;
-    case 4:
-      return r0 + r1 + r2 + r3 + r4;
-    case 5:
-      return r0 + r1 + r2 + r3 + r4 + r5;
-    default:
-      log(CTYPE_ICU_FILENAME, "Invalid TAILORING_PREFIX_SIZE");
-      assert(false);  // Should never happen
-      return icu::UnicodeString();
+  if (ICU_EXTRA_TAILORING) {
+    log(CTYPE_ICU_FILENAME,
+        "Adding extra tailoring (moving emojis to the end)");
+    return r0 + r1 + r2 + r3 + r4 + r5;
+  } else {
+    log(CTYPE_ICU_FILENAME, "Not adding extra tailoring");
+    return icu::UnicodeString();
   }
 }
 
