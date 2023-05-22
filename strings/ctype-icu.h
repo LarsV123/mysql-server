@@ -23,6 +23,7 @@
 void log(const char *file, const char *msg);
 // const bool ICU_DEBUG = true;
 const bool ICU_DEBUG = false;
+icu::UnicodeString convert_utf8_to_utf16(const uchar *src, size_t srclen);
 
 // How many extra tailoring rules to apply
 const int TAILORING_PREFIX_SIZE = 5;

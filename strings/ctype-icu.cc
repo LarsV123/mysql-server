@@ -219,9 +219,6 @@ icu::RuleBasedCollator *get_collator(const CHARSET_INFO *cs) {
 size_t icu_caseup(const CHARSET_INFO *cs [[maybe_unused]], char *src,
                   size_t srclen [[maybe_unused]], char *dst, size_t dstlen) {
   log(CTYPE_ICU_FILENAME, "icu_caseup");
-  // TODO: Add collator for locale support
-  // TODO: Split this into caseup_str and caseup
-
   // Convert the input UTF-8 string to a UnicodeString
   icu::UnicodeString input = icu::UnicodeString::fromUTF8(src);
 
@@ -240,9 +237,6 @@ size_t icu_caseup(const CHARSET_INFO *cs [[maybe_unused]], char *src,
 size_t icu_casedn(const CHARSET_INFO *cs [[maybe_unused]], char *src,
                   size_t srclen [[maybe_unused]], char *dst, size_t dstlen) {
   log(CTYPE_ICU_FILENAME, "icu_casedn");
-  // TODO: Add collator for locale support
-  // TODO: Split this into casedn_str and casedn
-
   // Convert the input UTF-8 string to a UnicodeString
   icu::UnicodeString input = icu::UnicodeString::fromUTF8(src);
 
@@ -287,6 +281,11 @@ int icu_strnncollsp(const CHARSET_INFO *cs [[maybe_unused]], const uchar *s,
   return cmp;
 }
 
+icu::UnicodeString convert_utf8_to_utf16(const uchar *src, size_t srclen) {
+  icu::StringPiece sp(reinterpret_cast<const char *>(src), srclen);
+  return icu::UnicodeString::fromUTF8(sp);
+}
+
 // Makes a sort key suitable for memcmp() for the given string
 // Equivalent to my_strnxfrm_uca_900_tmpl
 template <class Mb_wc, int LEVELS_FOR_COMPARE>
@@ -296,8 +295,8 @@ static size_t icu_strnxfrm_tmpl(const CHARSET_INFO *cs,
                                 uint flags [[maybe_unused]]) {
   log(CTYPE_ICU_FILENAME, "icu_strnxfrm_tmpl");
 
-  auto sp = icu::StringPiece(reinterpret_cast<const char *>(src), srclen);
-  auto input = icu::UnicodeString::fromUTF8(sp);
+  // Convert the input string from UTF-8 to UTF-16
+  auto input = convert_utf8_to_utf16(src, srclen);
 
   // Get a collator for this locale
   auto collator = get_collator(cs);
@@ -309,9 +308,14 @@ static size_t icu_strnxfrm_tmpl(const CHARSET_INFO *cs,
     // Output buffer is too small and gets filled to capacity
     // We don't know if this is a perfect fit or an overflow
     log(CTYPE_ICU_FILENAME, "icu_strnxfrm_tmpl: output buffer too small");
+
+    // Delete the generated UnicodeString
+    input.remove();
     return dstlen;
   }
 
+  // Delete the generated UnicodeString
+  input.remove();
   return expectedLen;
 }
 
