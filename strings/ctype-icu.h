@@ -31,6 +31,7 @@ const bool ICU_DEBUG = false;
 const bool ICU_FROZEN = true;
 
 // Apply extra tailoring rules to the collator (to test performance)
+// Only applies if ICU_FROZEN is true
 const bool ICU_EXTRA_TAILORING = false;
 
 // Thread local collator objects
